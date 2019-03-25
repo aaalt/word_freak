@@ -1,2 +1,4 @@
-//< FILE* f into TRIE and HSH
+//< text processing
+
+//< txt file processing 
 UJ txt_process(FILE* f)

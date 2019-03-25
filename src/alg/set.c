@@ -1,4 +1,4 @@
-//< get set all adt 
+//< get set all adt and files
 
 //< TODO
 //<	fopen_(FILE* f)
