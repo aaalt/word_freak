@@ -4,7 +4,7 @@
 #include "../cfg.h"
 
 #include "../adt/tri.h"
-#include 
+#include "str.h"
 
 //< TODO
 //<	tri_in(TRIE tri, S word)
