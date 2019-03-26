@@ -1,3 +1,10 @@
+//< text processing
+
+#include "../___.h"
+#include "../cfg.h"
+
+#include "../adt/tri.h"
+#include 
 
 //< TODO
 //<	tri_in(TRIE tri, S word)
@@ -30,7 +37,7 @@ UJ txt_get_word(S dir, S source, I i, I max_d, I max_s)
 	LOG("txt_get_word");
 	UJ j, ptr;
 
-	for (j = 0; in_alphabat(dir[j]) && j < max_d; j++);
+	for (j = 0; in_alphabet(dir[j]) && j < max_d; j++);
 
 	if (j == max_d) {
 		T(FATAL, "WORD_BUF is overflowed (max. capacity %d)", max_d);
@@ -50,7 +57,8 @@ UJ txt_get_word(S dir, S source, I i, I max_d, I max_s)
 UJ txt_process_buf(S buf, TRIE tri, HT hsh, I len)
 {
 	LOG("txt_process_buf");
-	UJ i = 0, ptr;
+	UJ i = 0, ptr, res;
+	UJ cnt_added = 0, cnt_repeats = 0, cnt_stops = 0;
 
 	if (in_alphabet(WORD_BUF[0])) 									//< if previous word_buf contains a word
 		if (!in_alphabet(buf[0])) 									//< and now we see that it's a completed
@@ -66,11 +74,16 @@ UJ txt_process_buf(S buf, TRIE tri, HT hsh, I len)
 		if (i >= len - 1 || ptr == i) R0;							//< if tail may be not empty or there are no
 																	//<	words left in a buf
 		INCLUDE:
-		if (!tri_in(tri, WORD_BUF))									//< if it's not a stop word
-			hsh_proc(hsh, WORD_BUF);								//< then decide what to do with hash
+		res = str_word_inclusion(WORD_BUF, hsh, tri);
+		P (res == NIL, NIL);
+		(!res) 		? cnt_repeats++ : 
+		(res = 1) 	? cnt_added++	: cnt_stops++; 
 
 		txt_clean_buf(WORD_BUF, SZ_WBUF);							//< clean WORD_BUF
 	}	
+
+	T(DEBUG, "%d words:  %d stops  %d unique  %d repeats", 
+		cnt_stops + cnt_added + cnt_repeats, cnt_stops, cnt_added, cnt_repeats);
 	R0;
 }
 

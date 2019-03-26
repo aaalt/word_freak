@@ -1,5 +1,8 @@
 //< get set all adt and files
 
+#include "../___.h"
+#include "../cfg.h"
+
 //< TODO
 //<	fopen_(FILE* f)
 //<	tri_init()
@@ -12,6 +15,7 @@
 
 UJ set_start(FILE* f)
 {
+	LOG("set_start");
 	f  = fopen_(TXT_FILE);
 	X(!f, {T(FATAL, "FILE %s does not exist", TXT_FILE);}, NIL);
 	STOP_TRIE = tri_init();
@@ -26,6 +30,7 @@ UJ set_start(FILE* f)
 
 UJ set_end(FILE* f)
 {
+	LOG("set_end");
 	fclose(f);
 	hsh_destroy(TEXT_HSH);
 	tri_destroy(STOP_TRIE);
