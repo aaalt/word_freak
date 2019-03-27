@@ -1,4 +1,6 @@
 //< text processing
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "../___.h"
 #include "../cfg.h"
@@ -12,6 +14,17 @@
 //< DEFINE TEXT_BUF WORD_BUF SZ_WBUF SZ_TBUF
 //< ADT STOP_TRIE TEXT_HSH
 
+UJ cnt_upd(UJ* cnt_0, UJ* cnt_1, UJ* cnt_2, UJ res)
+{
+	SW(res) {
+		CS(0, {*cnt_0++;});
+		CS(1, {*cnt_1++;});
+		CS(2, {*cnt_2++;});
+	}	
+	R res;
+}
+
+
 C in_alphabet(C c)
 {
 	R ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'b') || c == '\'') ? 1 : 0;
@@ -20,14 +33,15 @@ C in_alphabet(C c)
 
 UJ txt_swipe(S buf, I ptr, I lim)
 {
-	for (I i = 0; i + ptr < lim && !in_alphabet(buf[i+ptr]); i++);
+	I i;
+	for (i = 0; i + ptr < lim && !in_alphabet(buf[i+ptr]); i++);
 	R (i + ptr <= lim) ? NIL : i + ptr;
 }
 
 V txt_clean_buf(S buf, I len)
 {
-	for (i = 0; i < len; i++)
-		buf[i] = 0
+	for (I i = 0; i < len; i++)
+		buf[i] = 0;
 }
 
 //< returns last i+1 if success
@@ -74,10 +88,9 @@ UJ txt_process_buf(S buf, TRIE tri, HT hsh, I len)
 		if (i >= len - 1 || ptr == i) R0;							//< if tail may be not empty or there are no
 																	//<	words left in a buf
 		INCLUDE:
-		res = str_word_inclusion(WORD_BUF, hsh, tri);
-		P (res == NIL, NIL);
-		(!res) 		? cnt_repeats++ : 
-		(res = 1) 	? cnt_added++	: cnt_stops++; 
+		
+		P(cnt_upd(&cnt_repeats, &cnt_added, &cnt_stops, 			//< do str_word_inclusion(), update counters 
+			str_word_inclusion(WORD_BUF, hsh, tri)) == NIL, NIL);	//< panic if NIL is returned 
 
 		txt_clean_buf(WORD_BUF, SZ_WBUF);							//< clean WORD_BUF
 	}	
