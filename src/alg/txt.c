@@ -8,6 +8,9 @@
 #include "../adt/tri.h"
 #include "str.h"
 
+#include "../glb.h"
+
+
 //< TODO
 //<	tri_in(TRIE tri, S word)
 //<	hsh_proc(HT hsh, S word)
@@ -107,9 +110,11 @@ UJ txt_process(FILE* f)
 	UJ len;
 
 	LOOP:
-	
+
 	len = fread(TEXT_BUF, SZ(C), SZ_TBUF - 1, f);
+
 	TEXT_BUF[len] = 0;
+
 	P(txt_process_buf(TEXT_BUF, STOP_TRIE, TEXT_HSH, len + 1) == NIL, NIL);
 
 	if (!feof(f)) goto LOOP;

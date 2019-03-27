@@ -9,6 +9,8 @@
 #include "../adt/tri.h"
 #include "../adt/hsh.h"
 
+#include "../glb.h"
+
 
 
 // S keys[] = {"abbot", "abbey", "abacus", "abolition", "abolitions", "abortion", "abort", "zero"};

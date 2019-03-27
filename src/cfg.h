@@ -29,9 +29,10 @@
 #define TXT_FILE "test.txt"
 
 
-ext TRIE STOP_TRIE;
+/*ext TRIE STOP_TRIE;
 ext HT TEXT_HSH;
 
 //<	addresses of arrays!
 ext S TEXT_BUF;
 ext S WORD_BUF;
+*/

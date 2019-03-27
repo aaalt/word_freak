@@ -10,6 +10,8 @@
 #include "../adt/hsh.h"
 #include "str.h"
 
+#include "../glb.h"
+
 //< TODO
 //<	fopen_(FILE* f)
 //<	tri_init()
@@ -19,9 +21,9 @@
 //<	hsh_destroy()
 //< TOTAL: tri.c tri.h hsh.c hsh.h
 
-FILE* fopen_(S name)
+FILE* fopen_(FILE *f, S name)
 {
-	FILE*f = fopen(name, "r");
+	f = fopen(name, "r+");
 	R f;
 }
 
@@ -29,11 +31,11 @@ FILE* fopen_(S name)
 UJ set_start(FILE* f)
 {
 	LOG("set_start");
-	f  = fopen_(TXT_FILE);
+	f = fopen_(f, TXT_FILE);
 	X(!f, {T(FATAL, "FILE %s does not exist", TXT_FILE);}, NIL);
 	STOP_TRIE = tri_init();
 	X(!STOP_TRIE, {T(FATAL,"cannot init trie"); fclose(f);},NIL);
-	TEXT_HSH = hsh_init(1, 2);
+	TEXT_HSH = hsh_init(8, 8);
 	X(!TEXT_HSH, {T(FATAL, "cannot init hash"); tri_destroy(STOP_TRIE);}, NIL);
 	X(str_make_stop_trie(STOP_TRIE) == NIL, {T(FATAL, "cannot make stop words trie");
 											tri_destroy(STOP_TRIE); 
