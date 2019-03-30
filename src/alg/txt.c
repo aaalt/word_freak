@@ -104,16 +104,10 @@ UJ txt_process_buf(S buf, TRIE tri, HT hsh, I len)
 		txt_clean_buf(WORD_BUF, SZ_WBUF);
 
 	}
-	// T(TEST, "%d words:  %d stops  %d unique  %d repeats", 
-		// cnt_stops + cnt_added + cnt_repeats, cnt_stops, cnt_added, cnt_repeats);
 
-	// O("%d words:  %d stops  %d unique  %d repeats\n", 
-		// cnt_stops + cnt_added + cnt_repeats, cnt_stops, cnt_added, cnt_repeats);
 	fflush(stdout);
 	R0;
 }
-
-
 
 
 //< FILE* f into TRIE and HSH
@@ -131,6 +125,7 @@ UJ txt_process(FILE* f)
 	P(txt_process_buf(TEXT_BUF, STOP_TRIE, TEXT_HSH, len + 1) == NIL, NIL);
 
 	if (!feof(f)) goto LOOP;
+
 
 	R 0;
 }

@@ -55,17 +55,12 @@ UJ str_hsh_proc(HT hsh, S str)
 {
 	LOG("str_hsh_proc");
 
-	// BKT B = hsh_get(hsh, str, scnt(str));
 
-	// if (!B) {
-		X(hsh_ins(hsh, str, scnt(str), (V*)1) == NULL, T(WARN, "null ptr or empty key"), NIL);
-		// R 1;
-	// }
-	// else {
-		// O("'%s' NOT UNIQUE!\n", str);
-		// B->payload = (V*)((UJ)(B->payload) + 1);
-		// R 0;
-	// }
+
+	BKT B = hsh_get(hsh, str, scnt(str));
+
+	X(hsh_ins(hsh, str, scnt(str), (V*)1) == NULL, T(WARN, "null ptr or empty key"), NIL);
+
 	R 0;
 }
 
