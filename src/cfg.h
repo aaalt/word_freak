@@ -1,7 +1,4 @@
 
-//< DEFINE TEXT_BUF WORD_BUF SZ_WBUF SZ_TBUF
-//< ADT STOP_TRIE TEXT_HSH
-
 #pragma once
 
 
@@ -20,11 +17,8 @@
 #endif
 
 
-
-
-
-#define SZ_WBUF 100
-#define SZ_TBUF 10000
+#define SZ_WBUF 20
+#define SZ_TBUF 35
 
 #define TXT_FILE "test.txt"
 
