@@ -32,12 +32,11 @@ Z inline V hsh_idx(HT ht, V*s, UJ n, HTYPE*h, HTYPE*idx) {
 	*h = hash;
 	*idx = i;
 }
-
 //! print value
 V hsh_print(BKT b) {
 	LOG("hsh_print");
 	T(TEST, "bkt     -> %d",   b);
-//	T(TEST, "idx     -> %d",   b->idx);	
+	//	T(TEST, "idx     -> %d",   b->idx);	
 	T(TEST, "s       -> %s",   b->s);
 	T(TEST, "h       -> %d",   b->h);
 	T(TEST, "n       -> %d",   b->n);
@@ -79,30 +78,46 @@ V* hsh_get(HT ht, V*s, sz n) {
 	R r->s;
 }
 
+BKT hsh_inc_payload(HT ht, BKT B, HTYPE idx, V* payload)
+{
+	UJ res = (UJ)payload;
+	res++;
+	B->payload = (V*)res;
+	ht->buckets[idx] = B;
+	// O("payload is ");
+	// bits((V*)res);
+	R B;
+}
+
 BKT hsh_ins(HT ht, V*k, sz n, V*payload){
 	LOG("hsh_ins");
 	P(!k||!n,NULL); //< null ptr or empty key
-	V*r = hsh_get_bkt(ht, k, n);
-	P(r, r); //< return pointer if found
+	BKT r = hsh_get_bkt(ht, k, n);
+
+	UJ ptr;
 
 	HTYPE hash, idx;
 	UJ rec_len = SZ_BKT + n + 1;
 	hsh_idx(ht, k, n, &hash, &idx);
 
+	if (r) 
+		R hsh_inc_payload(ht, r, idx, r->payload);
+
 	T(TRACE, "cnt=%lu bucket=%d, split=%d, level=%d",
 		ht->cnt, idx, ht->split, ht->level);
+
 
 	//! value is not in the table, insert it:
 	BKT B = malloc(rec_len);chk(B,NULL);	//< init new value
 	ht->mem += rec_len;	ht->cnt++;			//< increment odometers
 	B->h              = hash;				//< set hash value
 	B->n              = n;					//< set val length
-//	B->idx            = idx;				//< set current bucket index
-	B->payload		  = payload;			//< set payload pointer
+	//	B->idx            = idx;				//< set current bucket index
 	B->packed		  = 0;					//< not in heap
 	B->next           = ht->buckets[idx];	//< link existing list item, if any
+	B->payload 		  =	payload;
 	*dsn(B->s,k,n)    = 0;					//< copy val and terminate it
-	
+		
 	ht->buckets[idx]  = B;					//< put at the head of the list
 
 	//T(TEST, "INS %s --> (%d)", B->s, idx);//hsh_print(B);
@@ -122,7 +137,7 @@ BKT hsh_ins(HT ht, V*k, sz n, V*payload){
 					moved->next = ht->buckets[new_idx]; //< link existing list item, if any
 					ht->buckets[new_idx] = moved; //< put at the head of the list
 					//T(TEST, "MOV --> %s (%d -> %d)", moved->s, moved->idx, new_idx);
-//					moved->idx = new_idx; //< update idx
+	//					moved->idx = new_idx; //< update idx
 				} else bp=&(*bp)->next; //< keep walking the list
 			}
 			//! once split reaches the middle:
