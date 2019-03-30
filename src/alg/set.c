@@ -28,19 +28,20 @@ FILE* fopen_(FILE *f, S name)
 }
 
 
-UJ set_start(FILE* f)
+FILE* set_start(FILE* f)
 {
 	LOG("set_start");
 	f = fopen_(f, TXT_FILE);
-	X(!f, {T(FATAL, "FILE %s does not exist", TXT_FILE);}, NIL);
+	X(!f, {T(FATAL, "FILE %s does not exist", TXT_FILE);}, (FILE*)NIL);
 	STOP_TRIE = tri_init();
-	X(!STOP_TRIE, {T(FATAL,"cannot init trie"); fclose(f);},NIL);
+	X(!STOP_TRIE, {T(FATAL,"cannot init trie"); fclose(f);},(FILE*)NIL);
 	TEXT_HSH = hsh_init(8, 8);
-	X(!TEXT_HSH, {T(FATAL, "cannot init hash"); tri_destroy(STOP_TRIE);}, NIL);
+	X(!TEXT_HSH, {T(FATAL, "cannot init hash"); tri_destroy(STOP_TRIE);fclose(f);}, (FILE*)NIL);
 	X(str_make_stop_trie(STOP_TRIE) == NIL, {T(FATAL, "cannot make stop words trie");
 											tri_destroy(STOP_TRIE); 
-											hsh_destroy(TEXT_HSH);}, NIL);
-	R 0;
+											hsh_destroy(TEXT_HSH);fclose(f);}, (FILE*)NIL);
+	// O("%d!\n", f);
+	R f;
 }
 
 UJ set_end(FILE* f)

@@ -42,27 +42,31 @@ UJ str_hsh_print(HT hsh)
 	DO(hsh_capacity(hsh), 
 		b = hsh->buckets[i];
 		W(b) {
-			O("bkt -->  %d\ns    -->  %s\namn  -->  %d\n\n", b, b->s, b->payload);
+			O("bkt -->  %d\ns    -->  %s\namn  -->  %d\n\n", b, b->s, (UJ)b->payload);
 			res += !!hsh_get(hsh, b->s, b->n);
 			b = b->next;
 		});
 	R res;
 }
 
+UJ str_inc_payload();
+
 UJ str_hsh_proc(HT hsh, S str)
 {
 	LOG("str_hsh_proc");
 
-	BKT B = hsh_get(hsh, str, scnt(str));
+	// BKT B = hsh_get(hsh, str, scnt(str));
 
-	if (!B) {
+	// if (!B) {
 		X(hsh_ins(hsh, str, scnt(str), (V*)1) == NULL, T(WARN, "null ptr or empty key"), NIL);
-		R 1;
-	}
-	else {
-		B->payload++;
-		R 0;
-	}
+		// R 1;
+	// }
+	// else {
+		// O("'%s' NOT UNIQUE!\n", str);
+		// B->payload = (V*)((UJ)(B->payload) + 1);
+		// R 0;
+	// }
+	R 0;
 }
 
 
@@ -74,9 +78,8 @@ UJ str_tri_in(TRIE tri, S str)
 
 UJ str_word_inclusion(S str, HT hsh, TRIE tri)
 {
-
 	if (!str_tri_in(tri, str))
 		R str_hsh_proc(hsh, str);		//< 0 if already exists; 1 if included
-	R 2;
-
+	// R 2;
+	R 0;
 }
