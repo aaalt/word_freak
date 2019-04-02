@@ -2,7 +2,10 @@
 frequency list of every word in a file with the exception of words from the stop list.
 
 # TODO
-- [x] main algorithm
+- [ ] !!! reorganize main algorithm (txt parsing should work for trie)
+
+
+- [ ] main algorithm
 - [ ] my own implementation of hash table
 - [ ] my own implementation of trie 
 - [x] text processing 
@@ -26,5 +29,6 @@ frequency list of every word in a file with the exception of words from the stop
 ## text processing 
 - [x] txt.c txt.h (th.)
 - [x] everything works
+- [ ] reorganize parsing
 
 * *th. means that hypothetically it should work
