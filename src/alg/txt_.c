@@ -4,13 +4,12 @@
 
 #include "../___.h"
 #include "../cfg.h"
+#include "../glb.h"
 
 #include "str.h"
 #include "txt.h"
 
 #include "../adt/tri.h"
-
-#include "../glb.h"
 
 
 //< TODO
@@ -27,8 +26,7 @@ C in_alphabet(C c)
 
 UJ txt_swipe(S buf, I ptr, I lim)
 {
-	I i;
-	for (i = 0; i + ptr < lim && !in_alphabet(buf[i+ptr]); i++);
+	for (I i = 0; i + ptr < lim && !in_alphabet(buf[i+ptr]); i++);
 	R (i + ptr >= lim - 1) ? NIL : i;
 }
 
@@ -53,8 +51,7 @@ UJ txt_get_word(S dir, S source, I max_d, I max_s, I ptr)
 	R (i == max_s || j + i == max_d) ? NIL : i;
 } 
 
-
-UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn)
+UJ txt_process_buf(S buf, TRIE tri, HT hsh, I len)
 {
 	I i = 0, var;
 	if (in_alphabet(WORD_BUF[0])) {
@@ -78,8 +75,7 @@ UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn)
 		P(i >= len - 1, 0); 
 
 		INCLUDE:
-		// P(str_word_inclusion(WORD_BUF, hsh, tri) == NIL, NIL);
-		P(fn(tri, hsh, WORD_BUF, var) == NIL, NIL);
+		P(str_word_inclusion(WORD_BUF, hsh, tri) == NIL, NIL);
 		txt_clean_buf(WORD_BUF, SZ_WBUF);
 	}
 
@@ -88,8 +84,7 @@ UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn)
 }
 
 //< FILE* f into TRIE and HSH
-//< fn: str_hsh_ins or str_tri_ins
-UJ txt_process(FILE* f, V* struct_1, V* struct_2, WORD_ADD fn)
+UJ txt_process(FILE* f)
 {
 	LOG("txt_process");
 	UJ len;
@@ -97,7 +92,7 @@ UJ txt_process(FILE* f, V* struct_1, V* struct_2, WORD_ADD fn)
 	LOOP:
 	len = fread(TEXT_BUF, SZ(C), SZ_TBUF - 1, f);
 	TEXT_BUF[len] = 0;
-	P(txt_process_buf(TEXT_BUF, struct_1, struct_2, len + 1, fn) == NIL, NIL);
+	P(txt_process_buf(TEXT_BUF, STOP_TRIE, TEXT_HSH, len + 1) == NIL, NIL);
 
 	if (!feof(f)) goto LOOP;
 
