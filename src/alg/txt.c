@@ -38,6 +38,13 @@ V txt_clean_buf(S buf, I len)
 	DO(len, buf[i] = 0);
 }
 
+UJ sz_buf(S buf, UJ max)
+{
+	I i;
+	for (i = 0; i < max && buf[i]; i++);
+	R i;
+}
+
 UJ txt_get_word(S dir, S source, I max_d, I max_s, I ptr)
 {
 	LOG("txt_get_word");
@@ -79,8 +86,8 @@ UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn, I param)
 		P(i >= len - 1 && !param, 0); 								//< it could be an incompleted word 
 
 		INCLUDE:
-		O("'%s'\n", WORD_BUF);
-		P(fn(tri, hsh, WORD_BUF, var) == NIL, NIL);
+		// O("'%s'\n", WORD_BUF);
+		P(fn(tri, hsh, WORD_BUF, sz_buf(WORD_BUF, SZ_WBUF)) == NIL, NIL);
 		txt_clean_buf(WORD_BUF, SZ_WBUF);
 	}
 
