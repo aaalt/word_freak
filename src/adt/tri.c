@@ -2,24 +2,48 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "../___.h"
+
 #include "tri.h"
+#include "../alg/chr.h"
+
+// C EXT_KEY[EXT_KEY_AM] = {'\''};
+
 
 /*****************************************************************/
+/*C cs(C c)
+{
+	// R toupper(c);
+	// R c;
+	R (C)tolower(c);
+}
+
+UJ tri_char_is_ext(C c)
+{
+	DO(EXT_KEY_AM, 
+				P(EXT_KEY[i] == c, i););
+	R NIL;
+}
+*/
 UJ tri_char_idx(C c)
 {
-	R (IN(0, c - TRI_RANGE_OFFSET, TRI_RANGE - 2)) 	? c - TRI_RANGE_OFFSET
-													: (c == EXT_KEY)
-																	? TRI_RANGE - 1
-																	: NIL;
+	// R (IN(0, c - TRI_RANGE_OFFSET, TRI_RANGE - 2)) 	? c - TRI_RANGE_OFFSET
+													// : (c == EXT_KEY)
+																	// ? TRI_RANGE - 1
+																	// : NIL;
+	R (IN(0, c - TRI_RANGE_OFFSET, TRI_RANGE - 1)) 	?	c - TRI_RANGE_OFFSET
+													:	(char_is_ext(c) != NIL)
+													?	TRI_RANGE + char_is_ext(c)
+													:	NIL;
 }
 
 UJ tri_str_check(S key, UJ key_len)
 {	
 	LOG("tri_str_check");
 	DO(key_len, {
-				X(tri_char_idx(key[i]) == NIL, 
+				X(tri_char_idx(cs(key[i])) == NIL, 
 				T(WARN,"unsupported characters in \e[1;32m(%.*s)\e[0m", 
 				key_len, key), NIL);});
 	R 1;
@@ -74,7 +98,7 @@ NODE tri_include(TRIE t, S key, UJ n, V* payload, C param)
 
 	P(tri_str_check(key, n) == NIL, (NODE)NIL);
 	NODE curr = t->root;
-	DO(n,curr = tri_insert_node(t, curr, key[i]))
+	DO(n,curr = tri_insert_node(t, curr, cs(key[i])))
 	if(param||!curr->payload){
 		curr->payload = payload;
 		t->cnt++;
@@ -115,7 +139,7 @@ NODE tri_get(TRIE t, S key)
 	C c, idx;
 
 	DO(l,  {
-		idx = tri_char_idx(key[i]);
+		idx = tri_char_idx(cs(key[i]));
 		P(idx == NIL, (NODE)NIL);
 		P(!cur, NULL);
 		cur = cur->children[idx];})
@@ -123,23 +147,25 @@ NODE tri_get(TRIE t, S key)
 	R cur;
 }
 
-
-ZV tri_each_node(TRIE t, NODE curr, TRIE_EACH fn, V*arg, I depth) {
+ZV tri_each_node(TRIE t, NODE curr, TRIE_EACH fn, V*arg, I depth) 
+{
 	fn(curr, arg, depth);
-	DO(TRI_RANGE,
+	DO(TRI_RANGE + EXT_KEY_AM,
 		NODE c = curr->children[i];
 		if(c)tri_each_node(t,c,fn,arg,depth+1)
 	)}
 
-ZV tri_each_node_reverse(TRIE t, NODE curr, TRIE_EACH fn, V*arg, I depth) {
-	DO(TRI_RANGE,
+ZV tri_each_node_reverse(TRIE t, NODE curr, TRIE_EACH fn, V*arg, I depth) 
+{
+	DO(TRI_RANGE + EXT_KEY_AM,
 		NODE c = curr->children[i];
 		if(c)tri_each_node_reverse(t,c,fn,arg,depth+1)
 	)
 	fn(curr, arg, depth);
 }
 
-V tri_each_from(TRIE t, NODE n, TRIE_EACH fn, V*arg) {
+V tri_each_from(TRIE t, NODE n, TRIE_EACH fn, V*arg) 
+{
 	if(!n)
 		R;
 	tri_each_node(t, n, fn, arg, 0);
@@ -162,11 +188,13 @@ V tri_each(TRIE t, TRIE_EACH fn, V* arg)
 	tri_each_node(t, t->root, fn, arg, 0);
 }
 
-V tri_each_reverse(TRIE t, TRIE_EACH fn, V*arg) {
+V tri_each_reverse(TRIE t, TRIE_EACH fn, V*arg) 
+{
 	tri_each_node_reverse(t, t->root, fn, arg, 0);}
 
 
-sz tri_destroy(TRIE t){
+sz tri_destroy(TRIE t)
+{
 	tri_each_reverse(t, tri_destroy_node, NULL);
 	sz released = t->mem;
 	free(t);

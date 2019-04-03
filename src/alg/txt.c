@@ -8,8 +8,7 @@
 
 #include "str.h"
 #include "txt.h"
-
-#include "../adt/tri.h"
+#include "chr.h"
 
 #include "../glb.h"
 
@@ -20,16 +19,15 @@
 //< DEFINE TEXT_BUF WORD_BUF SZ_WBUF SZ_TBUF
 //< ADT STOP_TRIE TEXT_HSH
 
+// C valid_key(C c)
+// {
+	// R ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '\'') ? 1 : 0;
+// }
 
-C in_alphabet(C c)
-{
-	R ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '\'') ? 1 : 0;
-}
-
-UJ txt_swipe(S buf, I ptr, I lim)
+/*UJ txt_swipe(S buf, I ptr, I lim)
 {
 	I i;
-	for (i = 0; i + ptr < lim && !in_alphabet(buf[i+ptr]); i++);
+	for (i = 0; i + ptr < lim && !valid_key(buf[i+ptr]); i++);
 	R (i + ptr >= lim - 1) ? NIL : i;
 }
 
@@ -44,29 +42,30 @@ UJ sz_buf(S buf, UJ max)
 	for (i = 0; i < max && buf[i]; i++);
 	R i;
 }
-
+*/
 UJ txt_get_word(S dir, S source, I max_d, I max_s, I ptr)
 {
 	LOG("txt_get_word");
 	UJ j, i;
 
-	for (j = 0; in_alphabet(dir[j]) && j < max_d; j++);
+	for (j = 0; valid_key(dir[j]) && j < max_d; j++);
 
 	X(j == max_d, T(FATAL, "WORD_BUF will be overflowed (max. capacity %d)", max_d), NIL);
 
-	for (i = 0; in_alphabet(source[ptr + i]) && i < max_s && j + i < max_d; i++) 
+	for (i = 0; valid_key(source[ptr + i]) && i < max_s && j + i < max_d; i++) 
 		dir[j + i] = source[ptr + i];
 	dir[j + i] = 0;
 
 	R (i == max_s || j + i == max_d) ? NIL : i;
 } 
 
-
+//<	process buf and break it into words 
+//<	use fn for each word found
 UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn, I param)
 {
 	I i = 0, var;
-	if (in_alphabet(WORD_BUF[0])) {
-		if (in_alphabet(buf[0])) {
+	if (valid_key(WORD_BUF[0])) {
+		if (valid_key(buf[0])) {
 			var = txt_get_word(WORD_BUF, buf, SZ_WBUF, len, i);		
 			P (var == NIL, NIL);									//< WORD_BUF or buf is overflowed
 			i += var;
@@ -75,7 +74,7 @@ UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn, I param)
 	}
 
 	W(i < len - 1) {
-		var = txt_swipe(buf, i, len);								//< how many chars swiped or NIL
+		var = swipe_buf(buf, i, len);								//< how many chars swiped or NIL
 		P(var == NIL, 0);											//< end of buf
 		i += var;													//< move pointer
 
@@ -86,9 +85,8 @@ UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn, I param)
 		P(i >= len - 1 && !param, 0); 								//< it could be an incompleted word 
 
 		INCLUDE:
-		// O("'%s'\n", WORD_BUF);
 		P(fn(tri, hsh, WORD_BUF, sz_buf(WORD_BUF, SZ_WBUF)) == NIL, NIL);
-		txt_clean_buf(WORD_BUF, SZ_WBUF);
+		clean_buf(WORD_BUF, SZ_WBUF);
 	}
 
 	fflush(stdout);
@@ -97,6 +95,7 @@ UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn, I param)
 
 //< FILE* f into TRIE and HSH
 //< fn: str_hsh_ins or str_tri_ins
+//< parsing main loop
 UJ txt_process(FILE* f, V* struct_1, V* struct_2, WORD_ADD fn)
 {
 	LOG("txt_process");
@@ -108,7 +107,7 @@ UJ txt_process(FILE* f, V* struct_1, V* struct_2, WORD_ADD fn)
 	P(txt_process_buf(TEXT_BUF, struct_1, struct_2, len + 1, fn, feof(f)) == NIL, NIL);
 	if (!feof(f)) goto LOOP;
 
-	txt_clean_buf(WORD_BUF, SZ_WBUF);
-	txt_clean_buf(TEXT_BUF, SZ_TBUF);
+	clean_buf(WORD_BUF, SZ_WBUF);
+	clean_buf(TEXT_BUF, SZ_TBUF);
 	R 0;
 }

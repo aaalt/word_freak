@@ -18,6 +18,8 @@
 #define SZ_WBUF 20
 #define SZ_TBUF 35
 
+#define EXT_KEY_AM 1
+
 #define TXT_FILE "txt/test.txt"
 #define STP_FILE "txt/stop.txt"
 

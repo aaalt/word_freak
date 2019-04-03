@@ -13,24 +13,35 @@
 					root is pointer for root node 
 	nothing to add :)
 **************************************************/
+// #include "../cfg.h"
 	
 
 #pragma once
 
-// #define TRI_RANGE 26
-#define TRI_RANGE 27 						//< because I need '\''
+//<	a b c d ... x y z ! @ *
+//<				      ^ ^ ^
+//<					ext_keys
+
+
+#define TRI_RANGE 26
+// #define TRI_RANGE 27 						//< because I need '\''
 
 //! 97 ascii lowercase, 65 ascii uppercase
 #define TRI_RANGE_OFFSET 97
 
-#define EXT_KEY '\''
+#define EXT_KEY_AM 1
+
+// C EXT_KEY[EXT_KEY_AM] = {'\''};
+
+// ext C EXT_KEY[];
+
 
 typedef struct node {
 	C key;
 	V* payload;
 	struct node* parent;
 	I depth;
-	struct node* children[TRI_RANGE];
+	struct node* children[TRI_RANGE + EXT_KEY_AM];
 } pNODE;
 
 #define SZ_NODE SZ(pNODE)

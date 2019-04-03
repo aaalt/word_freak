@@ -5,4 +5,6 @@ ext HT TEXT_HSH;
 ext S TEXT_BUF;
 ext S WORD_BUF;
 
+ext S EXT_KEY;
+
 ext FILE* f_ptr;
