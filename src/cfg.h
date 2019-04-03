@@ -1,7 +1,6 @@
 
 #pragma once
 
-
 #include <stddef.h>
 #include "___.h"
 #include "adt/hsh.h"
@@ -16,17 +15,9 @@
 #define LOGLEVEL L_INFO	//< set to WARN in prod builds
 #endif
 
-
 #define SZ_WBUF 20
 #define SZ_TBUF 35
 
-#define TXT_FILE "test.txt"
+#define TXT_FILE "txt/test.txt"
+#define STP_FILE "txt/stop.txt"
 
-
-/*ext TRIE STOP_TRIE;
-ext HT TEXT_HSH;
-
-//<	addresses of arrays!
-ext S TEXT_BUF;
-ext S WORD_BUF;
-*/

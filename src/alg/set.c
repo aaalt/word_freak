@@ -10,6 +10,7 @@
 #include "../adt/tri.h"
 #include "../adt/hsh.h"
 #include "str.h"
+#include "txt.h"
 
 #include "../glb.h"
 

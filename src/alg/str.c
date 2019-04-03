@@ -52,7 +52,8 @@ UJ str_hsh_print(HT hsh)
 		b = hsh->buckets[i];
 		W(b) {
 			// O("bkt -->  %d\ns    -->  %s\namn  -->  %d\n\n", b, b->s, (UJ)b->payload);
-			O("s     -->  %s\namn   -->  %d\n\n", b->s, b->payload);
+			// O("s     -->  %s\namn   -->  %d\n\n", b->s, b->payload);
+			O("%s\t%d\n", b->s, b->payload);
 			res += !!hsh_get(hsh, b->s, b->n);
 			b = b->next;
 		});

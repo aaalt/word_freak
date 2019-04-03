@@ -78,7 +78,7 @@ UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn)
 		P(i >= len - 1, 0); 
 
 		INCLUDE:
-		// P(str_word_inclusion(WORD_BUF, hsh, tri) == NIL, NIL);
+		// O("%s\n", WORD_BUF);
 		P(fn(tri, hsh, WORD_BUF, var) == NIL, NIL);
 		txt_clean_buf(WORD_BUF, SZ_WBUF);
 	}
@@ -101,5 +101,7 @@ UJ txt_process(FILE* f, V* struct_1, V* struct_2, WORD_ADD fn)
 
 	if (!feof(f)) goto LOOP;
 
+	txt_clean_buf(WORD_BUF, SZ_WBUF);
+	txt_clean_buf(TEXT_BUF, SZ_TBUF);
 	R 0;
 }

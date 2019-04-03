@@ -1,6 +1,8 @@
 //!\file trc.h \brief logging system api
 
 #pragma once
+#include <execinfo.h>
+
 
 #define TRC_MAX_STACK_DEPTH 41
 
