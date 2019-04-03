@@ -1,6 +1,7 @@
 //< text processing
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../___.h"
 #include "../cfg.h"
@@ -54,7 +55,7 @@ UJ txt_get_word(S dir, S source, I max_d, I max_s, I ptr)
 } 
 
 
-UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn)
+UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn, I param)
 {
 	I i = 0, var;
 	if (in_alphabet(WORD_BUF[0])) {
@@ -67,18 +68,18 @@ UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn)
 	}
 
 	W(i < len - 1) {
-		var = txt_swipe(buf, i, len);							//< how many chars swiped or NIL
-		P(var == NIL, 0);										//< end of buf
-		i += var;												//< move pointer
+		var = txt_swipe(buf, i, len);								//< how many chars swiped or NIL
+		P(var == NIL, 0);											//< end of buf
+		i += var;													//< move pointer
 
-		var = txt_get_word(WORD_BUF, buf, SZ_WBUF, len, i);		//< length of word or NIL
-		P(var == NIL, NIL);										//< problems with buf's capacity
+		var = txt_get_word(WORD_BUF, buf, SZ_WBUF, len, i);			//< length of word or NIL
+		P(var == NIL, NIL);											//< problems with buf's capacity
 		i += var;
 
-		P(i >= len - 1, 0); 
+		P(i >= len - 1 && !param, 0); 								//< it could be an incompleted word 
 
 		INCLUDE:
-		// O("%s\n", WORD_BUF);
+		O("'%s'\n", WORD_BUF);
 		P(fn(tri, hsh, WORD_BUF, var) == NIL, NIL);
 		txt_clean_buf(WORD_BUF, SZ_WBUF);
 	}
@@ -92,13 +93,12 @@ UJ txt_process_buf(S buf, V* tri, V* hsh, I len, WORD_ADD fn)
 UJ txt_process(FILE* f, V* struct_1, V* struct_2, WORD_ADD fn)
 {
 	LOG("txt_process");
-	UJ len;
+	UJ len, res;
 
 	LOOP:
 	len = fread(TEXT_BUF, SZ(C), SZ_TBUF - 1, f);
 	TEXT_BUF[len] = 0;
-	P(txt_process_buf(TEXT_BUF, struct_1, struct_2, len + 1, fn) == NIL, NIL);
-
+	P(txt_process_buf(TEXT_BUF, struct_1, struct_2, len + 1, fn, feof(f)) == NIL, NIL);
 	if (!feof(f)) goto LOOP;
 
 	txt_clean_buf(WORD_BUF, SZ_WBUF);
