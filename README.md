@@ -31,4 +31,16 @@ frequency list of every word in a file with the exception of words from the stop
 - [x] everything works
 - [X] reorganize parsing
 
+## understand the whole org/
+- [x] bag.c bag.h
+- [ ] clk.c clk.h
+- [ ] rnd.c rnd.h
+- [x] tri.c tri.h
+- [ ] hsh.c hsh.h
+- [ ] trc.c trc.h
+- [ ] vec.c vec.h
+- [x] \___.h
+
+
+
 * *th. means that hypothetically it should work
