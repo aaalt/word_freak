@@ -13,10 +13,11 @@
 					root is pointer for root node 
 	nothing to add :)
 **************************************************/
-// #include "../cfg.h"
-	
 
 #pragma once
+
+#include "../___.h"
+#include "../alg/chr.h"
 
 //<	a b c d ... x y z ! @ *
 //<				      ^ ^ ^
@@ -28,13 +29,6 @@
 
 //! 97 ascii lowercase, 65 ascii uppercase
 #define TRI_RANGE_OFFSET 97
-
-#define EXT_KEY_AM 1
-
-// C EXT_KEY[EXT_KEY_AM] = {'\''};
-
-// ext C EXT_KEY[];
-
 
 typedef struct node {
 	C key;
@@ -95,5 +89,7 @@ ext V    tri_each_reverse(TRIE t, TRIE_EACH fn, V*arg);
 //< free allocated memory
 ext sz   tri_destroy(TRIE t);
 
+
+#include "../glb.h"
 
 //:~

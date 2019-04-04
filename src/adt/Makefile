@@ -15,6 +15,10 @@ bag:
 	$(CC) -DRUN_TESTS_BAG $(CCOPTS) -o $(OUT)/bag ../utl/trc.c bag.c
 	$(VLG) $(OUT)/bag
 
+bag_:
+	$(CC) -DRUN_TESTS_BAG $(CCOPTS) -o $(OUT)/bag_ ../utl/trc.c bag_.c
+	$(VLG) $(OUT)/bag_
+
 vec:
 	$(CC) -DRUN_TESTS_VEC $(CCOPTS) -o $(OUT)/vec $(COMMON) vec.c 
 	$(VLG) $(OUT)/vec

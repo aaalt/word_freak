@@ -3,36 +3,26 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
+/*
 #include "../___.h"
+#include "../cfg.h"
+#include "../glb.h"
 
 #include "tri.h"
 #include "../alg/chr.h"
 
-// C EXT_KEY[EXT_KEY_AM] = {'\''};
 
+#define EXT_KEY_AM 1
+#define EXT_KEY_AM 1
+
+*/
+#include "tri.h"
+#include "../___.h"
 
 /*****************************************************************/
-/*C cs(C c)
-{
-	// R toupper(c);
-	// R c;
-	R (C)tolower(c);
-}
 
-UJ tri_char_is_ext(C c)
-{
-	DO(EXT_KEY_AM, 
-				P(EXT_KEY[i] == c, i););
-	R NIL;
-}
-*/
 UJ tri_char_idx(C c)
 {
-	// R (IN(0, c - TRI_RANGE_OFFSET, TRI_RANGE - 2)) 	? c - TRI_RANGE_OFFSET
-													// : (c == EXT_KEY)
-																	// ? TRI_RANGE - 1
-																	// : NIL;
 	R (IN(0, c - TRI_RANGE_OFFSET, TRI_RANGE - 1)) 	?	c - TRI_RANGE_OFFSET
 													:	(char_is_ext(c) != NIL)
 													?	TRI_RANGE + char_is_ext(c)
@@ -178,14 +168,12 @@ V tri_dump_from(TRIE t, NODE n)
 
 V tri_dump(TRIE t)
 {
-	// tri_dump_from(t, t->root);
-	tri_each(t, tri_dump_node, NULL);
+	tri_dump_from(t, t->root);
 }
 
 V tri_each(TRIE t, TRIE_EACH fn, V* arg)
 {
-	// tri_each_from(t, t->root, fn, arg);
-	tri_each_node(t, t->root, fn, arg, 0);
+	tri_each_from(t, t->root, fn, arg);
 }
 
 V tri_each_reverse(TRIE t, TRIE_EACH fn, V*arg) 
@@ -201,40 +189,39 @@ sz tri_destroy(TRIE t)
 	R released;
 }
 
-
-
-
-
-
-
-
-
 #ifdef RUN_TESTS_TRI
+
+#include "../alg/chr.c"
 
 V tri_test_each(NODE n, V*arg, I depth){
 	LOG("tri_test_each");
-	T(TEST, "key=(%c) depth=%3d arg=%ld", n->key, depth, (J)arg);
+	T(TEST, "key=(%c)\tdepth=%3d arg=%ld", n->key, depth, (J)arg);
 }
+
+C EXT_KEY_[EXT_KEY_AM] = "'";
+
+S EXT_KEY = &EXT_KEY_[0];
+
 
 I main() {
 
 	// S keys[] = {"abbot", "abbey", "abacus", "abolition", "abolitions", "abortion", "abort", "zero"};
 	S keys[] = {
-	"is","at", "an", "a", "the", "or", "and", "for", "be", "not", "no", "in", "on"};
+	"FORCE","at", "an", "a", "the", "or", "and", "for", "be", "not", "no", "in", "on", "it's", "isn't"};
 
 
 	LOG("tri_test");
 	TRIE t=tri_init();
 	X(!t,T(FATAL,"cannot init trie"),1);
 
-	DO(13, X(!tri_insert(t, keys[i], scnt(keys[i]), (V*)1), T(FATAL, "can't insert %s", keys[i]), 1))
+	DO(15, X(!tri_insert(t, keys[i], scnt(keys[i]), (V*)1), T(FATAL, "can't insert %s", keys[i]), 1))
 	T(TEST,"inserted %lu nodes", t->cnt);
 
 	tri_dump(t);
 
 	tri_each(t, tri_test_each, (V*)42);
 
-	DO(13, X(!tri_get(t, keys[i]), T(FATAL, "can't find %s", keys[i]), 1))
+	DO(15, X(!tri_get(t, keys[i]), T(FATAL, "can't find %s", keys[i]), 1))
 
 	tri_destroy(t);
 
