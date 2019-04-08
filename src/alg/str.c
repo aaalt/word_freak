@@ -25,8 +25,6 @@ UJ str_tri_ins(V* struct_1, V* struct_2, S word, UJ len)
 	R 0;
 }
 
-
-
 UJ str_hsh_print(HT hsh)
 {
 	LOG("str_hsh_print");
@@ -39,13 +37,14 @@ UJ str_hsh_print(HT hsh)
 			res += !!hsh_get(hsh, b->s, b->n);
 			b = b->next;
 		});
+	O("res: %d\n\n", res);
 	R res;
 }
 
 UJ str_hsh_proc(HT hsh, S str)
 {
 	LOG("str_hsh_proc");
-	X(hsh_ins(hsh, str, scnt(str), (V*)1) == NULL, T(WARN, "null ptr or empty key"), NIL);
+	X((UJ)hsh_ins(hsh, str, scnt(str), (V*)1) == NIL, T(WARN, "null ptr or empty key"), NIL);
 	R 0;
 }
 

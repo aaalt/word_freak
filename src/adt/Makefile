@@ -32,7 +32,7 @@ set:
 	$(VLG) $(OUT)/set
 
 hsh:
-	$(CC) -DRUN_TESTS_HSH $(CCOPTS) -o $(OUT)/hsh $(COMMON) ../utl/clk.c ../utl/rnd.c vec.c hsh.c
+	$(CC) -DRUN_TESTS_HSH $(CCOPTS) -o $(OUT)/hsh $(COMMON) ../utl/clk.c ../utl/rnd.c vec.c hsh_.c
 	$(VLG) $(OUT)/hsh
 
 #//:~

@@ -4,7 +4,6 @@
 #include <string.h>
 
 #include "../___.h"
-#include "../cfg.h"
 
 #include "str.h"
 #include "txt.h"
@@ -12,37 +11,6 @@
 
 #include "../glb.h"
 
-
-//< TODO
-//<	tri_in(TRIE tri, S word)
-//<	hsh_proc(HT hsh, S word)
-//< DEFINE TEXT_BUF WORD_BUF SZ_WBUF SZ_TBUF
-//< ADT STOP_TRIE TEXT_HSH
-
-// C valid_key(C c)
-// {
-	// R ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '\'') ? 1 : 0;
-// }
-
-/*UJ txt_swipe(S buf, I ptr, I lim)
-{
-	I i;
-	for (i = 0; i + ptr < lim && !valid_key(buf[i+ptr]); i++);
-	R (i + ptr >= lim - 1) ? NIL : i;
-}
-
-V txt_clean_buf(S buf, I len)
-{
-	DO(len, buf[i] = 0);
-}
-
-UJ sz_buf(S buf, UJ max)
-{
-	I i;
-	for (i = 0; i < max && buf[i]; i++);
-	R i;
-}
-*/
 UJ txt_get_word(S dir, S source, I max_d, I max_s, I ptr)
 {
 	LOG("txt_get_word");

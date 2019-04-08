@@ -7,30 +7,17 @@
 #include "../cfg.h"
 #include "../glb.h"
 
-// #include "chr.h"
-
 C cs(C c)
 {
-	// R toupper(c);
-	// R c;
+	// R (C)toupper(c);
+	// R (C)c;
 	R (C)tolower(c);
 }
 
 UJ char_is_ext(C c)
 {
-	I i;
-	for (i = 0; i < EXT_KEY_AM; i++) {
-		// O("%d!\n", i);
-		// O("%c!\n", EXT_KEY[0]);
-
-		if (EXT_KEY[i] == c)
-			R i;
-		// O("%c at %d NOT EXTRA\n", c, i);
-	}
-
-
-	// DO(EXT_KEY_AM, 
-				// P(EXT_KEY[i] == c, i););
+	DO(EXT_KEY_AM, 
+				P(EXT_KEY[i] == c, i););
 	R NIL;
 }
 

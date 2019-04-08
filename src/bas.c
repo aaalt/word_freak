@@ -13,7 +13,7 @@
 #include "alg/set.h"
 #include "alg/str.h"
 
-#include "adt/tri.h"
+// #include "adt/tri.h"
 
 TRIE STOP_TRIE;
 HT TEXT_HSH;
@@ -25,7 +25,6 @@ S TEXT_BUF = &TEXT_BUF_[0];
 S WORD_BUF = &WORD_BUF_[0];
 
 C EXT_KEY_[EXT_KEY_AM] = "'";
-
 S EXT_KEY = &EXT_KEY_[0];
 
 FILE* f_ptr;
@@ -40,7 +39,7 @@ I main()
 	// O("FINE!\n");
 	X(str_hsh_print(TEXT_HSH) == NIL, 		set_end(f_ptr), 1);		
 
-	tri_dump(STOP_TRIE);
+	// tri_dump(STOP_TRIE);
 
 
 	set_end(f_ptr);												

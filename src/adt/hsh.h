@@ -22,7 +22,7 @@ typedef pBKT* BKT;
 
 typedef struct hash_table {
 	HTYPE	split;		//< split position
-	HTYPE	level;		//< capacity is 2^level
+	HTYPE	level;		//< capacity is 2*level		//<	so level is like a half of a table?
 	H		rounds;		//< split rounds	
 	HTYPE	cnt; 		//< total values
 	HTYPE	bcnt;		//< occupied buckets
@@ -94,6 +94,28 @@ ext V  hsh_print(BKT b);
 
 //! release memory
 ext sz hsh_destroy(HT ht);
+
+/*
+	MAINS 
+	ext HT hsh_init(I level, H split_rounds);
+	ext BKT hsh_ins(HT ht, V*k, sz n, V*payload);
+	ext V*  hsh_get(HT ht, V*k, sz n);
+	ext sz hsh_destroy(HT ht);
+
+	SUBS
+	ext V hsh_info(HT ht);
+	ext V hsh_dump(HT ht);
+	ext E  hsh_bavg(HT ht);
+	ext E  hsh_factor(HT ht);
+	ext sz hsh_mem(HT ht);
+	ext C  hsh_pack(HT ht);
+	ext V  hsh_each(HT ht, HT_EACH fn, V*arg);
+	ext V  hsh_print(BKT b);
+	ext V*  hsh_get_payload(HT ht, V*k, sz n);
+	ext BKT hsh_get_bkt(HT ht, V*k, sz n);
+	ext HTYPE hsh_identity(V*a,UJ n);
+
+*/
 
 
 //:~
