@@ -9,4 +9,4 @@ const Z sz SZ_PAIR = SZ(pPAIR);
 typedef pPAIR* PAIR;
 
 
-UJ ord_ht(HT ht);
+UJ ord_ht(HT ht, C par);

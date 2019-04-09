@@ -6,7 +6,7 @@
 #include "../___.h"
 #include "ord.h"
 
-I cmpf (const V* a, const V* b) {
+I cmpf_dec(const V* a, const V* b) {
 	const PAIR x = (PAIR)a;
 	const PAIR y = (PAIR)b;
 
@@ -16,7 +16,17 @@ I cmpf (const V* a, const V* b) {
 		:(cmp > 0)	? 	-1	: 0;
 }
 
-UJ ord_ht(HT ht)
+I cmpf_inc(const V* a, const V* b) {
+	const PAIR x = (PAIR)a;
+	const PAIR y = (PAIR)b;
+
+	I cmp = x->cnt - y->cnt;
+
+	R 	 (cmp < 0)	? 	 -1	
+		:(cmp > 0)	? 	1	: 0;
+}
+
+UJ ord_ht(HT ht, C par)
 {
 	I i, j = 0;
 	pPAIR vals[ht->cnt];
@@ -31,9 +41,12 @@ UJ ord_ht(HT ht)
 		}
 	)
 	
-	qsort(vals, j, SZ_PAIR, cmpf);				//<	sort vals
+	if (par)
+		qsort(vals, j, SZ_PAIR, cmpf_dec);				//<	sort vals
+	else 
+		qsort(vals, j, SZ_PAIR, cmpf_inc);
 
-	DO(j , 										//<	print vals
+	DO(j, 										//<	print vals
 		b = vals[i].bucket;
 		O("%lu\t\"%s\"\n", (UJ)(b->payload), (S)(b->s));
 	)

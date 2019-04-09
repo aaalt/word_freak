@@ -31,7 +31,7 @@ UJ str_hsh_print(HT hsh)
 {
 	LOG("str_hsh_print");
 	UJ res, t;
-	res = ord_ht(hsh);
+	res = ord_ht(hsh, PRINT_PAR);
 	R res;
 
 }
