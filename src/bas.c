@@ -40,8 +40,6 @@ I main()
 	X(str_hsh_print(TEXT_HSH) == NIL, 		set_end(f_ptr), 1);		
 
 	// tri_dump(STOP_TRIE);
-
-
 	set_end(f_ptr);												
 	R0;
 }

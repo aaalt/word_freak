@@ -21,6 +21,13 @@ UJ char_is_ext(C c)
 	R NIL;
 }
 
+S convert_str(S key, I len)
+{
+	DO(len, 
+		key[i] = cs(key[i]);)
+	R key;
+}
+
 C in_alphabet(C c)
 {
 	R ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) ? 1 : 0;

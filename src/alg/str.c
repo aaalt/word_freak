@@ -6,9 +6,11 @@
 
 #include "../___.h"
 #include "../cfg.h"
+#include "../utl/clk.h"
 
 #include "../adt/tri.h"
 #include "../adt/hsh.h"
+#include "ord.h"
 
 #include "../glb.h"
 
@@ -28,19 +30,28 @@ UJ str_tri_ins(V* struct_1, V* struct_2, S word, UJ len)
 UJ str_hsh_print(HT hsh)
 {
 	LOG("str_hsh_print");
-	UJ res = 0;
+	UJ res, t;
+	clk_start();
+	res = ord_ht(hsh);
+	t = clk_stop();
+	O("[~] sort %d vals for %lums\n", hsh_capacity(hsh), t);
+	R res;
+
+	/*UJ res = 0;
 	BKT b;
 	DO(hsh_capacity(hsh), 
 		b = hsh->buckets[i];
 		W(b) {
-			O("%lu\t'%s'\t%d\n", b, b->s, b->payload);
+			O("%d\t\"%s\"\n", b->payload, b->s);
+			// O("%lu\t'%s'\t%d\n", b, b->s, b->payload);
 			res += !!hsh_get(hsh, b->s, b->n);
 			b = b->next;
 		});
-	O("res: %d\n\n", res);
-	R res;
+	O("\nres: %d\ncap: %d\n\n", res, hsh_capacity(hsh));
+	R res;*/
 }
 
+//<	hsh_ins
 UJ str_hsh_proc(HT hsh, S str)
 {
 	LOG("str_hsh_proc");

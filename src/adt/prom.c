@@ -217,12 +217,12 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 
 	P(!k || !n, (BKT)NIL);										//<	null ptr or empty key
 
-	BKT B = hsh_get_bkt(ht, convert_str(k, n), n);
+	BKT B = hsh_get_bkt(ht, k, n);
 	HTYPE hash, idx;
 	UJ rec_len = SZ_BKT + n + 1;
 	BKT* bp;
 
-	// convert_str((S)k, n);
+	convert_str((S)k, n);
 	
 	hsh_idx(ht, k, n, &hash, &idx);
 

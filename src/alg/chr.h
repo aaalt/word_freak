@@ -14,3 +14,5 @@ ext UJ swipe_buf(S buf, I ptr, I lim);
 ext V clean_buf(S buf, I len);
 
 ext UJ sz_buf(S buf, UJ max);
+
+ext S convert_str(S key, I len);
