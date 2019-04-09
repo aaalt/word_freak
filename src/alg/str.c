@@ -5,7 +5,6 @@
 #include <execinfo.h>
 
 #include "../___.h"
-#include "../cfg.h"
 #include "../utl/clk.h"
 
 #include "../adt/tri.h"
@@ -23,7 +22,6 @@ UJ str_tri_ins(V* struct_1, V* struct_2, S word, UJ len)
 
 	X(!tri_insert((TRIE)struct_1, word, len, (V*)1), 
 							T(FATAL, "can't insert %s", word), 	NIL);
-	// O("[str_tri_ins] '%s'\t (%d)\n", word, len);
 	R 0;
 }
 

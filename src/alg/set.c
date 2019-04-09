@@ -1,11 +1,9 @@
 //< get set all adt and files
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <execinfo.h>
 
 #include "../___.h"
-#include "../cfg.h"
 
 #include "../adt/tri.h"
 #include "../adt/hsh.h"
@@ -14,16 +12,8 @@
 
 #include "../glb.h"
 
-//< TODO
-//<	fopen_(FILE* f)
-//<	tri_init()
-//<	hsh_init()
-//<	tri_make_stop_trie()
-//<	tri_destroy()
-//<	hsh_destroy()
-//< TOTAL: tri.c tri.h hsh.c hsh.h
 
-FILE* fopen_(FILE *f, S name)
+FILE* mfopen(FILE *f, S name)
 {
 	f = fopen(name, "r+");
 	R f;
@@ -34,10 +24,10 @@ FILE* set_start(FILE* f)
 {
 	LOG("set_start");
 	FILE* g;
-	f = fopen_(f, TXT_FILE);
+	f = mfopen(f, TXT_FILE);
 	X(!f, 			{T(FATAL, "FILE %s does not exist", 	TXT_FILE);}, (FILE*)NIL);
 
-	g = fopen_(g, STP_FILE);
+	g = mfopen(g, STP_FILE);
 	X(!g, 			{T(FATAL, "FILE %s does not exist", 	STP_FILE);
 															fclose(f);}, (FILE*)NIL);
 	

@@ -13,12 +13,10 @@
 #define LOGLEVEL L_WARN		//< set to WARN in prod builds
 #endif
 
-#define PRINT_PAR 0			//<	set 1 if decreasing sort is neededы
-
+#define PRINT_PAR 0			//<	set 1 if decreasing sort is needed
 
 //<	size of WORD_BUF
 #define SZ_WBUF 200
-
 //<	size of TEXT_BUF
 #define SZ_TBUF 5000
 
@@ -28,7 +26,6 @@
 //<	path to file which will be processed into hash table
 #define TXT_FILE "txt/_tr_.txt"
 // #define TXT_FILE "txt/test.txt"
-
 //<	path to file which will be processed into trie (stop words)
 #define STP_FILE "txt/stop.txt"
 

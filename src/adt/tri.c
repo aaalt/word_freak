@@ -3,19 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-/*
-#include "../___.h"
-#include "../cfg.h"
-#include "../glb.h"
 
-#include "tri.h"
-#include "../alg/chr.h"
-
-
-#define EXT_KEY_AM 1
-#define EXT_KEY_AM 1
-
-*/
 #include "tri.h"
 #include "../___.h"
 

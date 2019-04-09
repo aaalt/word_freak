@@ -74,14 +74,10 @@ V hsh_print(BKT b)
 	LOG("hsh_print");
 
 	T(TEST, "bkt     -> %d",   b);
-	//	T(TEST, "idx     -> %d",   b->idx);	
 	T(TEST, "s       -> %s",   b->s);
 	T(TEST, "h       -> %d",   b->h);
 	T(TEST, "n       -> %d",   b->n);
 	T(TEST, "payload -> %lu",  b->packed);	
-	//T(TEST, "packed -> %d",   b->packed);	
-	//T(TEST, "next   -> %d",   (b->next)?(b->next)->idx:-1);
-	//T(TEST, "next   -> %lu",   b->next);
 }
 
 sz hsh_mem(HT ht) 
@@ -115,9 +111,7 @@ V hsh_info(HT ht)
 		hsh_capacity(ht), ht->cnt, hsh_bcnt(ht), hsh_bavg(ht), hsh_factor(ht), ht->split, hsh_mem(ht));
 }
 
-
 ///////////////////////////////////////////////////////////////
-
 
 HT hsh_init_custom(I level, H split_rounds, HSH_FN fn)
 {
@@ -144,7 +138,6 @@ HT hsh_init_custom(I level, H split_rounds, HSH_FN fn)
 	R ht;
 }
 
-//<	full
 BKT hsh_get_bkt(HT ht, V* k, sz n)
 {
 	LOG("hsh_get");
@@ -170,7 +163,6 @@ BKT hsh_get_bkt(HT ht, V* k, sz n)
 
 ///////////////////////////////////////////////////////////////
 
-//<	full
 V* hsh_get(HT ht, V* k, sz n)
 {
 	BKT b = hsh_get_bkt(ht, k, n);
@@ -179,13 +171,11 @@ V* hsh_get(HT ht, V* k, sz n)
 	R b->s;
 }
 
-//<	full
 HT hsh_init(I level, H split_rounds)
 {
 	R hsh_init_custom(level, split_rounds, HSH_DEFAULT_FN);
 }
 
-//<	full
 sz hsh_destroy(HT ht) 
 {
 	LOG("hsh_destroy");
@@ -222,8 +212,6 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 	UJ rec_len = SZ_BKT + n + 1;
 	BKT* bp;
 
-	// convert_str((S)k, n);
-	
 	hsh_idx(ht, k, n, &hash, &idx);
 
 	P(B, hsh_inc_payload(ht, B, idx, B->payload));				//< if B with k already exists, just increase payload

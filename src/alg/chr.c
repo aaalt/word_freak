@@ -43,11 +43,9 @@ C valid_key(C c)
 UJ swipe_buf(S buf, I ptr, I lim, C par)
 {
 	I i;
-	if (!par)
-		for (i = 0; i + ptr < lim && !valid_key(buf[i+ptr]); i++);
-	else 
-		for (i = 0; i + ptr < lim && valid_key(buf[i+ptr]); i++);
-			
+
+	for (i = 0; i + ptr < lim && !(par^valid_key(buf[i + ptr])); i++);		
+		
 	R (i + ptr >= lim - 1) ? NIL : i;
 }
 

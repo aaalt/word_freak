@@ -1,6 +1,5 @@
 //< get set all adt and files
 
-
 //< allocate memory for hash and trie, open files
 //< returns NIL if error
 FILE* set_start(FILE* f);

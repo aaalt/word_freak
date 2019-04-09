@@ -1,6 +1,4 @@
 
-// #pragma once
-
 ext C cs(C c);
 
 ext UJ char_is_ext(C c);

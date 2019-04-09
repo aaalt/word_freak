@@ -11,17 +11,23 @@
 
 #include "../glb.h"
 
+UJ SZFILE(FILE* ptr)
+{
+	I a, b;
+	a = ftell(ptr);
+	fseek(ptr, 0, SEEK_END);
+	b = ftell(ptr);
+	fseek(ptr, a, SEEK_SET);
+	R b;
+
+}
+
 UJ txt_get_word(FILE* f, S dir, S source, I max_d, I max_s, I ptr)
 {
 	LOG("txt_get_word");
 	UJ j, i;
 
 	for (j = 0; valid_key(dir[j]) && j < max_d; j++);
-
-	// X(j == max_d, T(FATAL, "WORD_BUF will be overflowed (max. capacity %d)", max_d), NIL);
-
-	// if (j >= max_d -1)
-		// O("IM HERE!\n");
 
 	X(j == max_d, T(WARN, "WORD_BUF is overflowed (max. capcity %d); file ptr at %d", max_d, ftell(f)), NIL);
 
@@ -53,17 +59,9 @@ UJ txt_process_buf(FILE* f, S buf, V* tri, V* hsh, I len, WORD_ADD fn, I param)
 		i += var;													//< move pointer
 
 		var = txt_get_word(f, WORD_BUF, buf, SZ_WBUF, len, i);		//< length of word or NIL
-		if (var == NIL && valid_key(WORD_BUF[SZ_WBUF - 1])) {
+		if (var == NIL && valid_key(WORD_BUF[SZ_WBUF - 1])) 
 			T(WARN, "WORD_BUF is overflowed (max. capcity %d); file ptr at %d", SZ_WBUF, ftell(f) - SZ_WBUF);
-		}
-			// var = swipe_buf(buf, i, len, 1);
-			// i += var;
-			// clean_buf(WORD_BUF, SZ_WBUF);
-		// }
-
-
-		// X(var == NIL && valid_key(WORD_BUF[SZ_WBUF - 1]), T(WARN, "WORD_BUF is overflowed (max. capcity %d); file ptr at %d", SZ_WBUF, ftell(f) + (len - i)), NIL);
-
+		
 
 		P(var == NIL, NIL);											//< problems with buf's capacity
 		i += var;

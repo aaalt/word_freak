@@ -32,7 +32,7 @@ UJ ord_ht(HT ht, C par)
 	pPAIR vals[ht->cnt];
 	BKT b;
 
-	DO(hsh_capacity(ht), 						//<	create vals 
+	DO(hsh_capacity(ht), 									//<	create vals 
 		b = ht->buckets[i];
 		W(b) {
 			vals[j].cnt = (UJ)(b->payload);
@@ -40,17 +40,13 @@ UJ ord_ht(HT ht, C par)
 			b = b->next;
 		}
 	)
-	
-	if (par)
-		qsort(vals, j, SZ_PAIR, cmpf_dec);				//<	sort vals
-	else 
-		qsort(vals, j, SZ_PAIR, cmpf_inc);
 
-	DO(j, 										//<	print vals
+	qsort(vals, j, SZ_PAIR, (par) ? cmpf_dec : cmpf_inc);	//<	sort vals
+
+	DO(j, 													//<	print vals
 		b = vals[i].bucket;
 		O("%lu\t\"%s\"\n", (UJ)(b->payload), (S)(b->s));
 	)
-
 	R 0;
 }
 
