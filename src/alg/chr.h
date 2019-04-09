@@ -9,7 +9,7 @@ ext C in_alphabet(C c);
 
 ext C valid_key(C c);
 
-ext UJ swipe_buf(S buf, I ptr, I lim);
+ext UJ swipe_buf(S buf, I ptr, I lim, C par);
 
 ext V clean_buf(S buf, I len);
 

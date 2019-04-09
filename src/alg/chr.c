@@ -38,10 +38,16 @@ C valid_key(C c)
 	R (in_alphabet(c) || char_is_ext(c) != NIL) ? 1 : 0;
 }
 
-UJ swipe_buf(S buf, I ptr, I lim)
+//< if par == 0 --> swipe non-alphabetical
+//<	if par == 1 --> swipe alphabetical
+UJ swipe_buf(S buf, I ptr, I lim, C par)
 {
 	I i;
-	for (i = 0; i + ptr < lim && !valid_key(buf[i+ptr]); i++);
+	if (!par)
+		for (i = 0; i + ptr < lim && !valid_key(buf[i+ptr]); i++);
+	else 
+		for (i = 0; i + ptr < lim && valid_key(buf[i+ptr]); i++);
+			
 	R (i + ptr >= lim - 1) ? NIL : i;
 }
 

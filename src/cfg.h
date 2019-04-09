@@ -10,14 +10,14 @@
 #ifdef TEST_MODE
 #define LOGLEVEL L_TEST
 #else
-#define LOGLEVEL L_INFO		//< set to WARN in prod builds
+#define LOGLEVEL L_WARN		//< set to WARN in prod builds
 #endif
 
 //<	size of WORD_BUF
 #define SZ_WBUF 200
 
 //<	size of TEXT_BUF
-#define SZ_TBUF 1000
+#define SZ_TBUF 5000
 
 //<	size of EXT_KEY (amount of extra keys for parsing, trie and hash)
 #define EXT_KEY_AM 1

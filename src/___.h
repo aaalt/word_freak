@@ -47,6 +47,8 @@ typedef wchar_t WC;
 #define MAX(x,y) ((y)>(x)?(y):(x))
 #define IN(l,x,r) ((l)<=(x)&&(x)<=(r))
 
+// #define SZFILE(f) {UJ b,a=ftell(f);fseek((f),0,SEEK_END);b=ftell(f);fseek((f),a,SEEK_SET);R(b);}
+
 //! usual suspects
 #define scnt(x) (UJ)strlen((S)(x))				//!< string length \param str */
 #define scmp(x,y) strcmp((S)(x),(S)(y))     	//!< compare two strings \param x str \param y str */
