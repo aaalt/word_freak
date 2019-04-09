@@ -13,6 +13,9 @@
 #define LOGLEVEL L_WARN		//< set to WARN in prod builds
 #endif
 
+#define PRINT_PAR 0			//<	set 1 if decreasing sort is neededы
+
+
 //<	size of WORD_BUF
 #define SZ_WBUF 200
 
