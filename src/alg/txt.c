@@ -2,105 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "../___.h"
 #include "../glb.h"
 #include "../utl/clk.h"
+
 #include "str.h"
 #include "txt.h"
 #include "chr.h"
 
 G SWIPE_NEXT_VALS = 0;
-UJ SZFILE(FILE* ptr);
-UJ txt_get_word(S dir, S source, I max_d, I max_s, I ptr);
-UJ txt_proc_buf(FILE* f, S buf, V* tri, V* hsh, I len, WORD_ADD fn, I param)
-{
-	LOG("txt_proc_buf");
-	UJ i = 0, j = 0, var = 0, cnt = 0;		
-	if (SWIPE_NEXT_VALS) {
-		var = swipe_buf(buf, i, len, 1);
-		i += var;
-		if (i < len - 1)
-			SWIPE_NEXT_VALS = 0;	}
-
-	if (valid_key(WORD_BUF[0])) {
-		if (valid_key(buf[i])) {
-			var = txt_get_word(WORD_BUF, buf, SZ_WBUF, len, i);
-			if (!var) {													//<	WORD_BUF was already full ||	i == len - 1 --> non-sence 
-				T(WARN, "\t[!]\tword '%s...' at %d (max. cap. %d)", WORD_BUF, ftell(f) - len - SZ_WBUF, SZ_WBUF);
-				var = swipe_buf(buf, i, len, 1);						//<	swipe valids 	
-				i += var;
-				if (var == NIL) {
-					SWIPE_NEXT_VALS = 1;
-					i = len - 1;	}
-				goto CLEAN;}
-			i += var;
-			if (valid_key(WORD_BUF[SZ_WBUF - 2])) {						//<	WORD_BUF is full
-				if (valid_key(buf[i])) {
-					T(WARN, "\t[!]\tword '%s...' at %d (max. cap. %d)", WORD_BUF, ftell(f) - len - SZ_WBUF, SZ_WBUF);
-					var = swipe_buf(buf, i, len, 1);						//<	swipe valids 	
-					i += var;
-					if (var == NIL) {
-					SWIPE_NEXT_VALS = 1;
-					i = len - 1;
-					}
-				
-					goto CLEAN;	}	}	}
-		goto INCLUDE;	}
-
-	W (i < len - 1) {
-		var = swipe_buf(buf, i, len, 0);								//<	swipe unvalids		
-		P(var == NIL, cnt);												//<	it's end of buf and all posiible words processed
-		i += var;
-		var = txt_get_word(WORD_BUF, buf, SZ_WBUF, len, i);
-		P(!var, cnt);													//<	WORD_BUF was already full --> non-sence || i == len - 1 - 
-		i += var;
-		P(!param && i >= len - 1, cnt);									//<	it could be an incompleted word
-
-		if (var == SZ_WBUF - 1) 										//<	if WORD_BUF is full
-			if (i >= len - 1) 
-				SWIPE_NEXT_VALS = 1;
-
-			if (valid_key(buf[i])) { 									//<	word is too long
-				T(WARN, "\t[!]\tword '%s...' at %d (max. cap. %d)", WORD_BUF, ftell(f) - len + i - SZ_WBUF, SZ_WBUF);
-				var = swipe_buf(buf, i, len, 1);
-				i += var;
-				if (var == NIL) {
-					SWIPE_NEXT_VALS = 1;
-					i = len - 1;	}
-				goto CLEAN;	}
-
-		P(i >= len - 1 && !param, 0); 								//< it could be an incompleted word 
-
-		INCLUDE:
-		cnt++;
-		P(fn(tri, hsh, WORD_BUF, sz_buf(WORD_BUF, SZ_WBUF)) == NIL, NIL);
-		CLEAN:
-		clean_buf(WORD_BUF, SZ_WBUF);
-	}
-	R cnt;
-}
-
-//< FILE* f into TRIE and HSH
-//< fn: str_hsh_ins or str_tri_ins
-//< parsing main loop
-UJ txt_process(FILE* f, V* struct_1, V* struct_2, WORD_ADD fn)
-{
-	LOG("txt_process");
-	UJ len, res, cnt = 0, t, i = 0;
-	T(INFO, "\n\n\t\t\t[txt_process]");
-	X(SZ_TBUF < SZ_WBUF, T(FATAL, "\t[!]\tSZ_TBUF must be >= SZ_WBUF (now SZ_TBUF = %d; SZ_WBUF = %d)", SZ_TBUF, SZ_WBUF), NIL);
-	clk_start();
-	LOOP:
-	len = fread(TEXT_BUF, SZ(C), SZ_TBUF - 1, f);
-	TEXT_BUF[len] = 0;
-	cnt += txt_proc_buf(f, TEXT_BUF, struct_1, struct_2, len + 1, fn, feof(f));
-	// P(txt_process_buf(f, TEXT_BUF, struct_1, struct_2, len + 1, fn, feof(f)) == NIL, NIL);
-	if (!feof(f)) goto LOOP;
-	T(INFO, "\t[+]\t%lu words passed for adding\t\t\t\t%lums", cnt, clk_stop());
-	clean_buf(WORD_BUF, SZ_WBUF);
-	clean_buf(TEXT_BUF, SZ_TBUF);
-	R 0;
-}
 
 UJ SZFILE(FILE* ptr)
 {
@@ -121,7 +32,99 @@ UJ txt_get_word(S dir, S source, I max_d, I max_s, I ptr)
 	R i;														//<	i 	-->	amount of copied chars
 }
 
+V overflow(S w_buf, I sz_w_buf, S t_buf, I sz_t_buf, UJ* i, I pos)
+{
+	LOG("overflow");
+	UJ var;
+	T(WARN, "\t[!]\tword '%.10s...' at %d (max. cap. %d)", w_buf, pos, sz_w_buf);
+	var = swipe_buf(t_buf, *i, sz_t_buf, 1);
+	*i += var;
+	if (var == NIL) {
+		SWIPE_NEXT_VALS = 1;
+		*i = sz_t_buf -1;
+	}
+}
 
+UJ txt_proc_buf(FILE* f, S buf, V* tri, V* hsh, I len, WORD_ADD fn, I param)
+{
+	LOG("txt_proc_buf");
+	UJ i = 0, j = 0, var = 0, cnt = 0;		
+
+	if (SWIPE_NEXT_VALS) {
+		var = swipe_buf(buf, i, len, 1);
+		P(var == NIL, 0);
+		i += var;
+		if (i < len - 1)
+			SWIPE_NEXT_VALS = 0;	
+	}
+
+	if (valid_key(WORD_BUF[0])) {
+		if (valid_key(buf[i])) {
+			var = txt_get_word(WORD_BUF, buf, SZ_WBUF, len, i);
+			if (!var) {													//<	WORD_BUF was already full ||	i == len - 1 --> non-sence 
+				overflow(WORD_BUF, SZ_WBUF, buf, len, &i, ftell(f) - len - SZ_WBUF);
+				goto CLEAN;
+			}
+			i += var;
+			if (valid_key(WORD_BUF[SZ_WBUF - 2]) && valid_key(buf[i])) {	//<	WORD_BUF is full and word is longer than SZ_WBUF
+				overflow(WORD_BUF, SZ_WBUF, buf, len, &i, ftell(f) - len - SZ_WBUF + var);
+				goto CLEAN;	
+			}	
+		}
+		goto INCLUDE;	
+	}
+
+	W (i < len - 1) {
+		var = swipe_buf(buf, i, len, 0);								//<	swipe unvalids		
+		P(var == NIL, cnt);												//<	it's end of buf and all posiible words were processed
+		i += var;
+		var = txt_get_word(WORD_BUF, buf, SZ_WBUF, len, i);
+		P(!var, cnt);													//<	WORD_BUF was already full --> non-sence || i == len - 1 - 
+		i += var;
+		P(!param && i >= len - 1, cnt);									//<	it could be an incompleted word
+
+		if (var == SZ_WBUF - 1 && i >= len -1) 							//<	if WORD_BUF is full and it's end of buf
+				SWIPE_NEXT_VALS = 1;
+
+		if (valid_key(buf[i])) { 										//<	word is too long
+			overflow(WORD_BUF, SZ_WBUF, buf, len, &i, ftell(f) - len + i - SZ_WBUF);
+			goto CLEAN;	
+		}
+
+		P(i >= len - 1 && !param, 0); 									//< it can be an incompleted word 
+
+		INCLUDE:
+		cnt++;
+		P(fn(tri, hsh, WORD_BUF, sz_buf(WORD_BUF, SZ_WBUF)) == NIL, NIL);
+		CLEAN:
+		clean_buf(WORD_BUF, SZ_WBUF);
+	}
+	R cnt;
+}
+
+//< FILE* f into TRIE and HSH
+//< fn: str_hsh_ins or str_tri_ins
+//< parsing main loop
+UJ txt_process(FILE* f, V* struct_1, V* struct_2, WORD_ADD fn)
+{
+	LOG("txt_process");
+	UJ len, res, cnt = 0, t, i = 0;
+
+	T(INFO, "\n\n\t\t\t[txt_process]");
+	X(SZ_TBUF < SZ_WBUF, T(FATAL, "\t[!]\tSZ_TBUF must be >= SZ_WBUF (now SZ_TBUF = %d; SZ_WBUF = %d)", SZ_TBUF, SZ_WBUF), NIL);
+
+	LOOP:
+	len = fread(TEXT_BUF, SZ(C), SZ_TBUF - 1, f);
+	TEXT_BUF[len] = 0;
+	i = txt_proc_buf(f, TEXT_BUF, struct_1, struct_2, len + 1, fn, feof(f));
+	cnt += i;
+	P(i == NIL, NIL);
+	if (!feof(f)) goto LOOP;
+
+	clean_buf(WORD_BUF, SZ_WBUF);
+	clean_buf(TEXT_BUF, SZ_TBUF);
+	R 0;
+}
 
 
 
