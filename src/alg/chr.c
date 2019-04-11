@@ -52,7 +52,10 @@ UJ swipe_buf(S buf, I ptr, I lim, C par)
 
 V clean_buf(S buf, I len)
 {
-	DO(len, buf[i] = 0);
+	// DO(len, buf[i] = 0);
+	I i;
+	for (i = 0; i < len && buf[i]; i++)
+		buf[i] = 0;
 }
 
 UJ sz_buf(S buf, UJ max)
