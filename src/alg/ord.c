@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "../___.h"
+#include "../utl/clk.h"
 #include "ord.h"
 
 I cmpf_dec(const V* a, const V* b) {
@@ -28,10 +29,13 @@ I cmpf_inc(const V* a, const V* b) {
 
 UJ ord_ht(HT ht, C par)
 {
+	LOG("ord_ht");
 	I i, j = 0;
+	UJ t;
 	pPAIR vals[ht->cnt];
 	BKT b;
 
+	clk_start();
 	DO(hsh_capacity(ht), 									//<	create vals 
 		b = ht->buckets[i];
 		W(b) {
@@ -40,13 +44,23 @@ UJ ord_ht(HT ht, C par)
 			b = b->next;
 		}
 	)
+	t = clk_stop();
+	T(INFO, "\t[~]\tht->buckets into vals (%lu buckets)\t\t\t%lums", ht->cnt, t);
 
+	clk_start();
 	qsort(vals, j, SZ_PAIR, (par) ? cmpf_dec : cmpf_inc);	//<	sort vals
+	t = clk_stop();
+	T(INFO, "\t[~]\tqsort %d buckets\t\t\t\t\t%lums", j, t);
 
+#ifndef RUN_TEST
+	t = clk_start();
 	DO(j, 													//<	print vals
 		b = vals[i].bucket;
-		O("%lu\t\"%s\"\n", (UJ)(b->payload), (S)(b->s));
+		O("\t%lu\t\"%s\"\n", (UJ)(b->payload), (S)(b->s));
 	)
+	t = clk_stop();
+	T(INFO, "\t[~]\tprint %d strings with payload\t\t\t\t%lums", j, t);
+#endif	
 	R 0;
 }
 

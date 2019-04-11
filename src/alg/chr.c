@@ -35,6 +35,7 @@ C in_alphabet(C c)
 
 C valid_key(C c)
 {
+	// R (in_alphabet(c)) ? 1 : 0;
 	R (in_alphabet(c) || char_is_ext(c) != NIL) ? 1 : 0;
 }
 
