@@ -53,6 +53,9 @@ UJ ord_ht(HT ht, C par)
 	T(INFO, "\t[~]\tqsort %d buckets\t\t\t\t\t%lums", j, t);
 
 #ifndef RUN_TEST
+	if (PRINT_TOP != NIL) {
+		j = PRINT_TOP;
+	}
 	t = clk_start();
 	DO(j, 													//<	print vals
 		b = vals[i].bucket;
@@ -60,6 +63,7 @@ UJ ord_ht(HT ht, C par)
 	)
 	t = clk_stop();
 	T(INFO, "\t[~]\tprint %d strings with payload\t\t\t\t%lums", j, t);
+
 #endif	
 	R 0;
 }
