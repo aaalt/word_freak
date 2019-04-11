@@ -18,9 +18,9 @@
 
 //<	size of WORD_BUF
 // #define SZ_WBUF 120
-#define SZ_WBUF 128			//<	larger SZ_WBUF 	-->	SLOWER program	(*n^2?)
+#define SZ_WBUF 1024			//<	larger SZ_WBUF 	-->	SLOWER program	(*n^2?)
 //<	size of TEXT_BUF
-#define SZ_TBUF 32768*2*2		//<	larger SZ_TBUF 	--> FASTER program (*1/logn?)
+#define SZ_TBUF 131072			//<	larger SZ_TBUF 	--> FASTER program (*1/logn?)
 // #define SZ_TBUF 60
 
 //<	size of EXT_KEY (amount of extra keys for parsing, trie and hash)
