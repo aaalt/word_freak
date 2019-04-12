@@ -56,7 +56,8 @@ V clean_buf(S buf, I len)
 	// I i;
 	// for (i = 0; i < len && buf[i]; i++)
 		// buf[i] = 0;
-	buf[0] = 0;
+	// buf[0] = 0;
+	buf[0] = buf[len - 1] = buf[len - 2] = 0;
 }
 
 UJ sz_buf(S buf, UJ max)

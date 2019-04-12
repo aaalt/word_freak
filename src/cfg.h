@@ -17,10 +17,10 @@
 #define PRINT_TOP 10		//<	set NIL if you want to print all	
 
 //<	size of WORD_BUF
-// #define SZ_WBUF 120
-#define SZ_WBUF 1024			//<	larger SZ_WBUF 	-->	SLOWER program	(*n^2?)
+// #define SZ_WBUF 8
+#define SZ_WBUF 1024		
 //<	size of TEXT_BUF
-#define SZ_TBUF 131072			//<	larger SZ_TBUF 	--> FASTER program (*1/logn?)
+#define SZ_TBUF 131072		
 // #define SZ_TBUF 60
 
 //<	size of EXT_KEY (amount of extra keys for parsing, trie and hash)

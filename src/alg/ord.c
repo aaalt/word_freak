@@ -8,23 +8,21 @@
 #include "ord.h"
 
 I cmpf_dec(const V* a, const V* b) {
-	const PAIR x = (PAIR)a;
-	const PAIR y = (PAIR)b;
+	// const PAIR x = (PAIR)a;
+	// const PAIR y = (PAIR)b;
 
-	I cmp = x->cnt - y->cnt;
-
-	R 	 (cmp < 0)	? 	 1	
-		:(cmp > 0)	? 	-1	: 0;
+	// I cmp = x->cnt - y->cnt;
+	R ((PAIR)b)->cnt - ((PAIR)a)->cnt;
+	// R 	 (cmp < 0)	? 	 1	
+		// :(cmp > 0)	? 	-1	: 0;
+	// R -cmp;
 }
 
 I cmpf_inc(const V* a, const V* b) {
-	const PAIR x = (PAIR)a;
-	const PAIR y = (PAIR)b;
+	// const PAIR x = (PAIR)a;
+	// const PAIR y = (PAIR)b;
 
-	I cmp = x->cnt - y->cnt;
-
-	R 	 (cmp < 0)	? 	 -1	
-		:(cmp > 0)	? 	1	: 0;
+	R ((PAIR)a)->cnt - ((PAIR)b)->cnt;
 }
 
 UJ ord_ht(HT ht, C par)
@@ -53,7 +51,7 @@ UJ ord_ht(HT ht, C par)
 	T(INFO, "\t[~]\tqsort %d buckets\t\t\t\t\t%lums", j, t);
 
 #ifndef RUN_TEST
-	if (PRINT_TOP != NIL) {
+	if (PRINT_TOP != NIL && j >= PRINT_TOP) {
 		j = PRINT_TOP;
 	}
 	t = clk_start();

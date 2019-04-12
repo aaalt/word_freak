@@ -65,7 +65,8 @@ Z inline V hsh_idx(HT ht, V* s, UJ n, HTYPE* h, HTYPE* idx)
 
 BKT hsh_inc_payload(HT ht, BKT B, HTYPE idx, V* payload)
 {
-	(UJ)(B->payload)++;
+	UJ p = (UJ)(payload) + 1;
+	B->payload = (V*)p;
 	R B;
 }
 
