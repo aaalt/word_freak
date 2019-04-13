@@ -16,24 +16,26 @@
 #define PRINT_PAR 1			//<	set 0 if increasing sort is needed
 #define PRINT_TOP 10		//<	set NIL if you want to print all	
 
-//<	size of WORD_BUF
-// #define SZ_WBUF 8
-#define SZ_WBUF 1024		
-//<	size of TEXT_BUF
-#define SZ_TBUF 131072		
-// #define SZ_TBUF 60
-
-//<	size of EXT_KEY (amount of extra keys for parsing, trie and hash)
+//!	size of EXT_KEY (amount of extra keys for parsing, trie and hash)
 #define EXT_KEY_AM 1
 
-//<	path to file which will be processed into hash table
+#if 1
+//! live run
+#define SZ_WBUF 1024
+#define SZ_TBUF 131072
+//!	path to file which will be processed into hash table
 #define TXT_FILE "txt/_tr_.txt"
-// #define TXT_FILE "txt/test.txt"
+//!	path to file which will be processed into trie (stop words)
+#define STP_FILE "txt/stop.txt"
 
-// #define TXT_FILE "txt/overflow.txt"
-//<	path to file which will be processed into trie (stop words)
-// #define STP_FILE "txt/stop.txt"
-#define STP_FILE "txt/plain.txt"
+#else
+//! minimal test
+#define SZ_WBUF 4
+#define SZ_TBUF 8
+#define TXT_FILE "txt/test_body.txt"
+#define STP_FILE "txt/test_stop.txt"
+
+#endif
 
 #include "adt/hsh.h"
 #include "adt/tri.h"
