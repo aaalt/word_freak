@@ -13,12 +13,15 @@ UJ clk_diff(clock_t s, clock_t e) {
 	R(e - s) * 1E3 / CLOCKS_PER_SEC;
 }
 
-UJ clk_stop() {
-	end = clock();
-	UJ r = clk_diff(start,end);
-	start = end; //< allow chained clk_stop()
-	R r;
+UJ clk_since(clock_t s) {
+	R clk_diff(s,clock());
 }
+
+UJ clk_stop() {
+	UJ r = clk_since(start);
+	start = clock(); // allow chained clk_stop()
+	R r;
+} 
 
 Z UJ clk_test(UJ n) {
 	LOG("clk_test");
