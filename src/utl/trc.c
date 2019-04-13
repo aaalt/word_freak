@@ -1,6 +1,6 @@
 //!\file trc.c \brief logging system
 
-#if WIN32||_WIN64
+#if WIN32||_WIN64||__OpenBSD__
 #else
 #include <execinfo.h>
 #endif 
@@ -59,7 +59,7 @@ V TBUF(C sw) {
 V TSTART() {cont=1;}
 V TEND() {O("\n");cont=0;newline=1;}
 
-#if WIN32||_WIN64
+#if WIN32||_WIN64||__OpenBSD__
 V _stack(S msg, I d, I offset) {}
 #else
 V _stack(S msg, I d, I offset) {
@@ -68,7 +68,7 @@ V _stack(S msg, I d, I offset) {
  sz size, i;
  S*strings;
  size = backtrace(array, d);
- strings = backtrace_symbols(array,size);
+ strings = (S*)backtrace_symbols(array,size);
  DO(size-offset,O("%s %s\n",msg, strings[i+offset]));
  free(strings);}
 #endif
@@ -78,7 +78,8 @@ V BYTES_AS_STR(S str,I n){DO(n,O("%c", (C)str[i]))}
 //! print bits
 V bits_char(C x, S dest) {
     C pos=0;
-    for(I z=128; z>0; z>>=1)
+    I z;
+    for(z=128; z>0; z>>=1)
     	dest[pos++]="01"[(x&z)==z];
     dest[pos]=0;
 }
