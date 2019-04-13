@@ -54,13 +54,13 @@ UJ ord_ht(HT ht, C par)
 	if (PRINT_TOP != NIL && j >= PRINT_TOP) {
 		j = PRINT_TOP;
 	}
-	t = clk_start();
+	//t = clk_start();
 	DO(j, 													//<	print vals
 		b = vals[i].bucket;
 		O("\t%lu\t\"%s\"\n", (UJ)(b->payload), (S)(b->s));
 	)
-	t = clk_stop();
-	T(INFO, "\t[~]\tprint %d strings with payload\t\t\t\t%lums", j, t);
+	//t = clk_stop();
+	//T(INFO, "\t[~]\tprint %d strings with payload\t\t\t\t%lums", j, t);
 
 #endif	
 	R 0;
