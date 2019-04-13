@@ -13,7 +13,7 @@
 #include "../glb.h"
 
 
-UJ str_tri_ins(V* struct_1, V* struct_2, S word, UJ len)
+UJ str_tri_ins(V* struct_1, V* struct_2, TXT_T word, UJ len)
 {
 	LOG("str_tri_ins");
 
@@ -33,19 +33,19 @@ UJ str_hsh_print(HT hsh)
 }
 
 //<	hsh_ins
-UJ str_hsh_proc(HT hsh, S str)
+UJ str_hsh_proc(HT hsh, TXT_T str)
 {
 	LOG("str_hsh_proc");
 	X((UJ)hsh_ins(hsh, str, scnt(str), (V*)1) == NIL, T(WARN, "null ptr or empty key"), NIL);
 	R 0;
 }
 
-UJ str_tri_in(TRIE tri, S str)
+UJ str_tri_in(TRIE tri, TXT_T str)
 {
 	R (tri_get(tri, str)) ? 1 : 0;
 }
 
-UJ str_hsh_ins(V* struct_1, V* struct_2, S word, UJ len)
+UJ str_hsh_ins(V* struct_1, V* struct_2, TXT_T word, UJ len)
 {
 	LOG("str_hsh_ins");
 	X(!struct_1 || !struct_2, T(WARN, "invalid pointers"), NIL);

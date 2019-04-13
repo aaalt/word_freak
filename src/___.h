@@ -20,7 +20,7 @@ typedef unsigned char G;
 typedef size_t sz;
 
 typedef wchar_t WC;
-
+typedef wchar_t* UTF;
 //! remove clutter
 #define R return
 #define O printf

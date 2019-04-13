@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "___.h"
+
 #include "utl/trc.h"
 #include "utl/clk.h"
 
@@ -13,7 +14,7 @@
 
 TRIE STOP_TRIE;
 HT TEXT_HSH;
-
+/*
 C TEXT_BUF_[SZ_TBUF];
 C WORD_BUF_[SZ_WBUF];
 
@@ -22,6 +23,17 @@ S WORD_BUF = &WORD_BUF_[0];
 
 C EXT_KEY_[EXT_KEY_AM] = "'";
 S EXT_KEY = &EXT_KEY_[0];
+*/
+
+TXT_TYPE TEXT_BUF_[SZ_TBUF];
+TXT_TYPE WORD_BUF_[SZ_WBUF];
+
+TXT_T TEXT_BUF = &TEXT_BUF_[0];
+TXT_T WORD_BUF = &WORD_BUF_[0];
+
+TXT_TYPE EXT_KEY_[EXT_KEY_AM] = "'";
+TXT_T EXT_KEY = &EXT_KEY_[0];
+
 
 FILE* f_ptr;
 

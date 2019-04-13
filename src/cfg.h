@@ -21,12 +21,21 @@
 
 #if 1
 //! live run
-#define SZ_WBUF 1024
-#define SZ_TBUF 131072
+// #define SZ_WBUF 1024
+#define SZ_WBUF 8
+// #define SZ_TBUF 131072
+#define SZ_TBUF 8
 //!	path to file which will be processed into hash table
-#define TXT_FILE "txt/_tr_.txt"
+// #define TXT_FILE "txt/_tr_.txt"
+#define TXT_FILE "txt/overflow.txt"
 //!	path to file which will be processed into trie (stop words)
-#define STP_FILE "txt/stop.txt"
+// #define STP_FILE "txt/stop.txt"
+#define STP_FILE "txt/plain.txt"
+
+typedef char TXT_TYPE;
+typedef char* TXT_T;
+// typedef wchar_t TXT_TYPE;
+// typedef wchar_t* TXT_T;
 
 #else
 //! minimal test
