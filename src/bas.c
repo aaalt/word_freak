@@ -1,6 +1,7 @@
 //< main of word_freak
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "___.h"
 #include "utl/trc.h"
@@ -29,16 +30,19 @@ I main()
 	LOG("_main_");
 	UJ t;
 
+	srand(0);
+
 	// clk_start();
 	f_ptr = set_start(f_ptr);
 	// t1 = clk_stop();
 
 	P((UJ)f_ptr == NIL, 1);
 
-	clk_start();
+	clock_t s = clk_start();
 	X(txt_process(f_ptr, STOP_TRIE, TEXT_HSH, str_hsh_ins) == NIL, 
-											set_end(f_ptr), 1);
-	t = clk_stop();
+		set_end(f_ptr), 1);		
+	t = clk_since(s);
+	
 	T(INFO, "\t[~]\ttxt_process for ht (inserted %d str)\t\t\t%lums", TEXT_HSH->cnt, t);
 	// t2 = clk_stop();
 	// R 0;
