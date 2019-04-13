@@ -1,5 +1,4 @@
 //!\file trc.c \brief logging system
-
 #if WIN32||_WIN64||__OpenBSD__
 #else
 #include <execinfo.h>
@@ -20,6 +19,7 @@ ZC use_buf = 0;
 ZC tmpbuf[1000];
 Z BAG logbuf;
 
+#ifdef __linux__
 //! trace
 I T(I lvl, const S fn, const S file, const I line, const S fmt, ...) {
 	if(lvl<=LOGLEVEL) {
@@ -28,7 +28,7 @@ I T(I lvl, const S fn, const S file, const I line, const S fmt, ...) {
 		C buf[strlen(fn)+strlen(fmt)+strlen(file)+100];
 		if (!cont) {
 			OUT:snprintf(buf, SZ(buf), " %s%s\e[0m %s:%d\t[%s] %s%c",
-				lvl<L_INFO?"\e[1;33m":"\e[37m", loglevel_names[lvl], file, line, fn, fmt, newline?'\n':'\0');
+				lvl<L_INFO?"\e[1;31m":"\e[37m", loglevel_names[lvl], file, line, fn, fmt, newline?'\n':'\0');
 			if(cont)newline = 0;
 		} else {
 			if(newline){newline=0;goto OUT;}
@@ -43,6 +43,32 @@ I T(I lvl, const S fn, const S file, const I line, const S fmt, ...) {
 	}
 	R1; //< err
 }
+#else
+
+I T(I lvl, const S fn, const S file, const I line, const S fmt, ...) {
+	if(lvl<=LOGLEVEL) {
+		va_list args;
+		va_start(args, fmt);
+		C buf[strlen(fn)+strlen(fmt)+strlen(file)+100];
+		if (!cont) {
+			OUT:snprintf(buf, SZ(buf), " %s%s\e[0m %s:%d\t[%s] %s%c",
+				lvl<L_INFO?"\e[1;31m":"\e[37m", loglevel_names[lvl], file, line, fn, fmt, newline?'\n':'\0');
+			if(cont)newline = 0;
+		} else {
+			if(newline){newline=0;goto OUT;}
+			snprintf(buf, SZ(buf), "%s", fmt);
+		}
+		if(use_buf) {
+			sz len = vsnprintf(tmpbuf, 1000, buf, args);
+			bag_add(logbuf,tmpbuf,len);
+		}else 
+			vprintf(buf, args);
+		va_end(args);
+	}
+	R1; //< err
+}
+
+#endif
 
 V TBUF(C sw) {
 	if(sw) {
