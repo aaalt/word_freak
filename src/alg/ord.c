@@ -28,7 +28,7 @@ I cmpf_inc(const V* a, const V* b) {
 UJ ord_ht(HT ht, C par)
 {
 	LOG("ord_ht");
-	I i, j = 0;
+	UJ i, j = 0;
 	UJ t;
 	pPAIR vals[ht->cnt];
 	BKT b;
