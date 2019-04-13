@@ -1,7 +1,6 @@
 //< get set all adt and files
 #include <stdio.h>
 #include <stdlib.h>
-#include <execinfo.h>
 
 #include "../___.h"
 #include "../utl/clk.h"

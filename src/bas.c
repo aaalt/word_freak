@@ -1,7 +1,6 @@
 //< main of word_freak
 #include <stdio.h>
 #include <stdlib.h>
-#include <execinfo.h>
 
 #include "___.h"
 #include "utl/trc.h"
