@@ -22,13 +22,13 @@
 
 #if 1
 //! live run
-#define SZ_WBUF 1024
-// #define SZ_WBUF 36
-#define SZ_TBUF 131072
-// #define SZ_TBUF 8
+// #define SZ_WBUF 1024
+#define SZ_WBUF 4
+// #define SZ_TBUF 131072
+#define SZ_TBUF 8
 //!	path to file which will be processed into hash table
-#define TXT_FILE "txt/_tr_.txt"
-// #define TXT_FILE "txt/overflow.txt"
+// #define TXT_FILE "txt/_tr_.txt"
+#define TXT_FILE "txt/overflow.txt"
 //!	path to file which will be processed into trie (stop words)
 // #define STP_FILE "txt/stop.txt"
 #define STP_FILE "txt/plain.txt"

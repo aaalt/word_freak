@@ -12,13 +12,11 @@
 
 #include "../glb.h"
 
-
 UJ str_tri_ins(V* struct_1, V* struct_2, TXT_T word, UJ len)
 {
 	LOG("str_tri_ins");
-
+	
 	X(struct_2 != NULL, 	T(WARN, "incorrect fn usage"), 		NIL);
-
 	X(!tri_insert((TRIE)struct_1, word, len, (V*)1), 
 							T(FATAL, "can't insert %s", word), 	NIL);
 	R 0;

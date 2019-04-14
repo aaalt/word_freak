@@ -51,7 +51,7 @@ C in_alphabet(WC c)
 C valid_key(C c)
 {
 	// R (in_alphabet(c)) ? 1 : 0;
-	R (in_alphabet(c) || char_is_ext(c) != NIL) ? 1 : 0;
+	R (char_is_ext(c) != NIL || in_alphabet(c)) ? 1 : 0;
 }
 
 //< if par == 0 --> swipe non-alphabetical

@@ -12,7 +12,6 @@
 
 #include "../glb.h"
 
-
 FILE* mfopen(FILE *f, S name)
 {
 	f = fopen(name, "r+");
@@ -65,6 +64,6 @@ UJ set_end(FILE* f)
 	tri_destroy(STOP_TRIE);
 	t = clk_stop();
 	T(INFO, "\t[-]\tdeallocate mem of trie, hsh and file (mem %d)\t%lums", mem, t);
-	T(INFO, "\t[?]\tSZ_WBUF: %d\tSZ_TBUF: %d\t\t\t", SZ_WBUF, SZ_TBUF);
+	T(INFO, "\t[?]\tSZ_WBUF: %d\tSZ_TBUF: %d\tEXT_KEY_AM: %d (%s)\t\t", SZ_WBUF, SZ_TBUF, EXT_KEY_AM, EXT_KEY);
 	R 0;
 }
