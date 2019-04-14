@@ -3,7 +3,8 @@ ext C cs(C c);
 
 ext UJ char_is_ext(C c);
 
-ext C in_alphabet(C c);
+// ext C in_alphabet(C c);
+ext C in_alphabet(WC c);
 
 ext C valid_key(C c);
 

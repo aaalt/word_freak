@@ -24,7 +24,6 @@ S WORD_BUF = &WORD_BUF_[0];
 C EXT_KEY_[EXT_KEY_AM] = "'";
 S EXT_KEY = &EXT_KEY_[0];
 */
-
 TXT_TYPE TEXT_BUF_[SZ_TBUF];
 TXT_TYPE WORD_BUF_[SZ_WBUF];
 
@@ -32,8 +31,8 @@ TXT_T TEXT_BUF = &TEXT_BUF_[0];
 TXT_T WORD_BUF = &WORD_BUF_[0];
 
 TXT_TYPE EXT_KEY_[EXT_KEY_AM] = "'";
+// TXT_TYPE EXT_KEY_[EXT_KEY_AM] = "'_-";
 TXT_T EXT_KEY = &EXT_KEY_[0];
-
 
 FILE* f_ptr;
 
@@ -41,32 +40,18 @@ I main()
 {
 	LOG("_main_");
 	UJ t;
-
+	clock_t s;
 	srand(0);
 
-	// clk_start();
 	f_ptr = set_start(f_ptr);
-	// t1 = clk_stop();
 
 	P((UJ)f_ptr == NIL, 1);
-
-	clock_t s = clk_start();
+	s = clk_start();
 	X(txt_process(f_ptr, STOP_TRIE, TEXT_HSH, str_hsh_ins) == NIL, 
 		set_end(f_ptr), 1);		
 	t = clk_since(s);
-	
 	T(INFO, "\t[~]\ttxt_process for ht (inserted %d str)\t\t\t%lums", TEXT_HSH->cnt, t);
-	// t2 = clk_stop();
-	// R 0;
-
 	X(str_hsh_print(TEXT_HSH) == NIL, 		set_end(f_ptr), 1);		
-	// t3 = clk_stop();
-
-	// szfile = SZFILE(f_ptr);
-	// O("set_start\t%lums\n", t1);
-	// O("txt_process\t%lums\tszfile %lu\tinserted %lu\n", t2, szfile, TEXT_HSH->cnt);
-	// O("str_hsh_print\t%lums\n", t3);
 	set_end(f_ptr);			
-
 	R0;
 }

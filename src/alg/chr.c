@@ -27,11 +27,26 @@ S convert_str(S key, I len)
 		key[i] = cs(key[i]);)
 	R key;
 }
-
+/*
 C in_alphabet(C c)
 {
 	R ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) ? 1 : 0;
 }
+*/
+
+C in_alphabet(WC c)
+{
+	R  (IN(0x41, c, 0x5a) || IN(0x61, c, 0x7a) || 									//<	basic latin
+		IN(0x400, c, 0x45F) ||	IN(0x460, c, 0x52f) ||	IN(0x1c80, c, 0x1c88) ||	//<	cyrillic
+		IN(0xc0, c, 0xd6) || IN(0xd8, c, 0xf6) || (IN(0xf8, c, 0x2b8)) ||			//<	extended latin	
+		IN(0x370, c, 0x373) || IN(0x376, c, 0x377) || IN(0x37b, c, 0x37d) ||		//<	greek
+		(c == 0x37f) || (c == 0x386) || IN(0x388, c, 0x38a) || (c == 0x38c) ||		//<	greek
+		IN(0x38e, c, 0x3a1) || IN(0x3a3, c, 0x3ff) || 								//<	greek
+		IN(0x1d00, c, 0x1dbf) ||													//<	phonetics
+		IN(0x1e00, c, 0x1eff) || IN(0x2c60, c, 0x2c7f)
+		) ? 1 : 0;
+}
+
 
 C valid_key(C c)
 {

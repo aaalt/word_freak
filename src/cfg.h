@@ -18,6 +18,7 @@
 
 //!	size of EXT_KEY (amount of extra keys for parsing, trie and hash)
 #define EXT_KEY_AM 1
+// #define EXT_KEY_AM 3
 
 #if 1
 //! live run
