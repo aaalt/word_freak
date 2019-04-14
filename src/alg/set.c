@@ -45,7 +45,7 @@ FILE* set_start(FILE* f)
 	t = clk_stop();
 	T(INFO, "\t[+]\ttxt_process for trie (%d stop words inserted)\t\t%lums", STOP_TRIE->cnt, t);
 	
-	TEXT_HSH = hsh_init(8, 8);
+	TEXT_HSH = hsh_init(256, 3);
 	X(!TEXT_HSH, 	{T(FATAL, "cannot init hash"); 			tri_destroy(STOP_TRIE); 
 															fclose(f);
 															fclose(g);}, (FILE*)NIL);
