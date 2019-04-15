@@ -1,7 +1,7 @@
 //! \file glb.h \brief global variables 
 
-// ext TRIE STOP_TRIE;
-ext HT STOP_TRIE;
+// ext TRIE STOP_HSH;
+ext HT STOP_HSH;
 ext HT TEXT_HSH;
 
 //<	addresses of arrays

@@ -30,8 +30,8 @@ typedef char* STR;
 typedef wchar_t CHAR;
 typedef wchar_t* STR;
 #else
-typedef char CHAR;
-typedef char* STR;
+typedef void CHAR;
+typedef void* STR;
 #endif
 
 #if 1

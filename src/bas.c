@@ -13,8 +13,8 @@
 #include "alg/set.h"
 #include "alg/str.h"
 
-// TRIE STOP_TRIE;
-HT STOP_TRIE;
+// TRIE STOP_HSH;
+HT STOP_HSH;
 HT TEXT_HSH;
 /*
 C TEXT_BUF_[SZ_TBUF];
@@ -52,7 +52,7 @@ I main()
 
 	P((UJ)f_ptr == NIL, 1);
 	s = clk_start();
-	X(txt_process(f_ptr, STOP_TRIE, TEXT_HSH, str_hsh_ins) == NIL, 
+	X(txt_process(f_ptr, STOP_HSH, TEXT_HSH, str_hsh_ins) == NIL, 
 		set_end(f_ptr), 1);		
 	t = clk_since(s);
 	T(INFO, "\t[~]\ttxt_process for ht (inserted %d str)\t\t\t%lums", TEXT_HSH->cnt, t);
