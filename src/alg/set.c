@@ -23,6 +23,8 @@ FILE* set_start(FILE* f)
 	LOG("set_start");
 	FILE* g;
 	UJ t;
+	X(TXT_DATA_TYPE != 1 && TXT_DATA_TYPE != 4, T(FATAL, "\t[!]\tinvalid data type size\t[TXT_DATA_TYPE = %d]", TXT_DATA_TYPE), (FILE*)NIL);
+
 	f = mfopen(f, TXT_FILE);
 	X(!f, 			{T(FATAL, "FILE %s does not exist", 	TXT_FILE);}, (FILE*)NIL);
 

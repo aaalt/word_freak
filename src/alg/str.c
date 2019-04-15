@@ -13,7 +13,7 @@
 
 #include "../glb.h"
 
-UJ str_tri_ins(V* struct_1, V* struct_2, TXT_T word, UJ len)
+UJ str_tri_ins(V* struct_1, V* struct_2, STR word, UJ len)
 {
 	LOG("str_tri_ins");
 	
@@ -32,19 +32,19 @@ UJ str_hsh_print(HT hsh)
 }
 
 //<	hsh_ins
-UJ str_hsh_proc(HT hsh, TXT_T str, UJ len)
+UJ str_hsh_proc(HT hsh, STR str, UJ len)
 {
 	LOG("str_hsh_proc");
 	X((UJ)hsh_ins(hsh, str, len, (V*)1) == NIL, T(WARN, "null ptr or empty key"), NIL);
 	R 0;
 }
 
-UJ str_tri_in(HT tri, TXT_T str, UJ max)
+UJ str_tri_in(HT tri, STR str, UJ max)
 {
 	R (hsh_get((HT)tri, str, max) != NULL) ? 1 : 0; 
 }
 
-UJ str_hsh_ins_(V* struct_1, V* struct_2, TXT_T word, UJ len)
+UJ str_hsh_ins_(V* struct_1, V* struct_2, STR word, UJ len)
 {
 	LOG("str_hsh_ins_");
 	X(!struct_1 || struct_2, T(WARN, "invalid pointer"), NIL);
@@ -52,7 +52,7 @@ UJ str_hsh_ins_(V* struct_1, V* struct_2, TXT_T word, UJ len)
 	R str_hsh_proc((HT)struct_1, word, len);
 }
 
-UJ str_hsh_ins(V* struct_1, V* struct_2, TXT_T word, UJ len)
+UJ str_hsh_ins(V* struct_1, V* struct_2, STR word, UJ len)
 {
 	LOG("str_hsh_ins");
 	X(!struct_1 || !struct_2, T(WARN, "invalid pointers"), NIL);

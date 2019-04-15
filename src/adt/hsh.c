@@ -165,7 +165,7 @@ BKT hsh_get_bkt(HT ht, V* k, sz n)
 
 V* hsh_get(HT ht, V* k, sz n)
 {
-	UJ len = n * SZ(TXT_TYPE);
+	UJ len = n * SZ(CHAR);
 	BKT b = hsh_get_bkt(ht, k, len);
 	P(!b, NULL);
 	P((UJ)b == NIL, (V*)NIL);
@@ -210,7 +210,7 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 
 	// O("HSH_INS '%ls'\t%lu\t last %u, %u %u\n", (UTF)k, n, ((UTF)k)[n-2], ((UTF)k)[n-1], ((UTF)k)[n]);
 
-	UJ str_len = n * SZ(TXT_TYPE);
+	UJ str_len = n * SZ(CHAR);
 	UJ rec_len = SZ_BKT + str_len + 1;
 	// BKT B = hsh_get_bkt(ht, convert_str(k, n), str_len);
 	BKT B = hsh_get_bkt(ht, k, str_len);
@@ -237,7 +237,7 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 	B->next 		  =	ht->buckets[idx];						//<	link existing list if any
 	B->payload 		  =	payload;								//<	set payload
 	// *dsn(B->s, k, n)  =	0;
-	((TXT_T)(k))[n] = 0;
+	((STR)(k))[n] = 0;
 	*dsn(B->s, k, str_len)  =	0;
 
 	B->idx 			  =	idx;

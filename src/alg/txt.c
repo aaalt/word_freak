@@ -27,7 +27,7 @@ UJ SZFILE(FILE* ptr)
 	R b;
 }
 
-UJ txt_get_word(TXT_T dir, TXT_T source, I max_d, I max_s, I ptr)
+UJ txt_get_word(STR dir, STR source, I max_d, I max_s, I ptr)
 {
 	LOG("txt_get_word");
 	UJ i, j = 0;
@@ -48,7 +48,7 @@ UJ txt_get_word(TXT_T dir, TXT_T source, I max_d, I max_s, I ptr)
 	R i;														//<	i 	-->	amount of copied chars
 }
 
-V txt_overflow(TXT_T w_buf, I sz_w_buf, TXT_T t_buf, I sz_t_buf, UJ* i, I pos)
+V txt_overflow(STR w_buf, I sz_w_buf, STR t_buf, I sz_t_buf, UJ* i, I pos)
 {
 	LOG("txt_overflow");
 	UJ var;
@@ -61,7 +61,7 @@ V txt_overflow(TXT_T w_buf, I sz_w_buf, TXT_T t_buf, I sz_t_buf, UJ* i, I pos)
 	}
 }
 
-UJ txt_proc_buf(TXT_T buf, V* tri, V* hsh, I len, WORD_ADD fn, I param, I prev, I cur)
+UJ txt_proc_buf(STR buf, V* tri, V* hsh, I len, WORD_ADD fn, I param, I prev, I cur)
 {
 	LOG("txt_proc_buf");
 	UJ i = 0, var = 0, cnt = 0, word_ptr = 0;;		

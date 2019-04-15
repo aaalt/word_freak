@@ -22,29 +22,29 @@ I cmpf_inc(const V* a, const V* b) {
 #if (TXT_DATA_TYPE == 1)
 V print_hsh_bkt(BKT b)
 {
-	O("\t%lu\t\"%s\"     \t%u\n", (UJ)(b->payload), (TXT_T)(b->s), (UI)(b->idx));
+	O("\t%lu\t\"%s\"     \t%u\n", (UJ)(b->payload), (STR)(b->s), (UI)(b->idx));
 }
 #else
 V print_hsh_bkt(BKT b)
 {
-	UJ len = sz_buf((TXT_T)(b->s), SZ_WBUF);
+	UJ len = sz_buf((STR)(b->s), SZ_WBUF);
 	I i;
-	TXT_TYPE c;
-	TXT_T s = (TXT_T)(b->s);
+	CHAR c;
+	STR s = (STR)(b->s);
 
 	// O("l %lu\t", len);
 	fflush(stdout);
 
-	// O("\t%lu\t\"%ls\"     \t%u\n", (UJ)(b->payload), (TXT_T)(b->s), (UI)(b->idx));
+	// O("\t%lu\t\"%ls\"     \t%u\n", (UJ)(b->payload), (STR)(b->s), (UI)(b->idx));
 	O("\t%lu\t\"", (UJ)(b->payload));
 	// fflush(stdout);
 	DO(len,
 
 		// O("!\n");
-		// c = ((TXT_T)(b)->s)[i];
+		// c = ((STR)(b)->s)[i];
 		c = s[i];
 		// O("!\n");
-		// O("%ls", (TXT_TYPE)(((TXT_T)b)->s[i]));
+		// O("%ls", (CHAR)(((STR)b)->s[i]));
 		O("%lc", c);
 
 		fflush(stdout);

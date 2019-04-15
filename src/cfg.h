@@ -24,17 +24,14 @@
 #define TXT_DATA_TYPE 4
 
 #if (TXT_DATA_TYPE == 1)
-
-typedef char TXT_TYPE;
-typedef char* TXT_T;
-
+typedef char CHAR;
+typedef char* STR;
 #elif (TXT_DATA_TYPE == 4)
-typedef wchar_t TXT_TYPE;
-typedef wchar_t* TXT_T;
-
+typedef wchar_t CHAR;
+typedef wchar_t* STR;
 #else
-typedef char TXT_TYPE;
-typedef char* TXT_T;
+typedef char CHAR;
+typedef char* STR;
 #endif
 
 #if 1

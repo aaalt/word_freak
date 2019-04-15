@@ -10,37 +10,37 @@
 #include "../glb.h"
 
 #if (TXT_DATA_TYPE == 1)
-TXT_TYPE mtoupper(TXT_TYPE c)
+CHAR mtoupper(CHAR c)
 {
-	R (TXT_TYPE)toupper(c);
+	R (CHAR)toupper(c);
 }
-TXT_TYPE mtolower(TXT_TYPE c)
+CHAR mtolower(CHAR c)
 {
-	R (TXT_TYPE)tolower(c);
+	R (CHAR)tolower(c);
 }
 
-C in_alphabet(TXT_TYPE c)
+C in_alphabet(CHAR c)
 {
 	R ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) ? 1 : 0;
 }
 
-UJ mfread(FILE* f, TXT_T buf, UJ max)
+UJ mfread(FILE* f, STR buf, UJ max)
 {
-	UJ len = fread(buf, SZ(TXT_TYPE), max - 1, f);
+	UJ len = fread(buf, SZ(CHAR), max - 1, f);
 	TEXT_BUF[len] = 0;
 	R len + 1;
 }
 #else
-TXT_TYPE mtoupper(TXT_TYPE c)
+CHAR mtoupper(CHAR c)
 {
-	R (TXT_TYPE)towupper(c);
+	R (CHAR)towupper(c);
 }
-TXT_TYPE mtolower(TXT_TYPE c)
+CHAR mtolower(CHAR c)
 {
-	R (TXT_TYPE)towlower(c);
+	R (CHAR)towlower(c);
 }
 
-C in_alphabet(TXT_TYPE c)
+C in_alphabet(CHAR c)
 {
 	R  (IN(0x41, c, 0x5a) || IN(0x61, c, 0x7a) || 									//<	basic latin		[52]
 		// IN(0x400, c, 0x45F) ||	IN(0x460, c, 0x52f) ||	IN(0x1c80, c, 0x1c88) ||	//<	cyrillic		[96+...]
@@ -55,7 +55,7 @@ C in_alphabet(TXT_TYPE c)
 		) ? 1 : 0;
 }
 
-UJ mfread(FILE* f, TXT_T buf, UJ max)
+UJ mfread(FILE* f, STR buf, UJ max)
 {
 	UJ i = 0;
 	for (i = 0; i < max - 1 && !feof(f); i++) 
@@ -65,28 +65,28 @@ UJ mfread(FILE* f, TXT_T buf, UJ max)
 }
 #endif
 
-TXT_TYPE cs(TXT_TYPE c)
+CHAR cs(CHAR c)
 {
 	// R (C)mtoupper(c);
 	// R (C)c;
-	R (TXT_TYPE)mtolower(c);
+	R (CHAR)mtolower(c);
 }
 
-UJ char_is_ext(TXT_TYPE c)
+UJ char_is_ext(CHAR c)
 {
 	DO(EXT_KEY_AM, 
 				P(EXT_KEY[i] == c, i););
 	R NIL;
 }
 
-TXT_T convert_str(TXT_T key, I len)
+STR convert_str(STR key, I len)
 {
 	DO(len, 
 		key[i] = cs(key[i]);)
 	R key;
 }
 
-C valid_key(TXT_TYPE c)
+C valid_key(CHAR c)
 {
 	// R (in_alphabet(c)) ? 1 : 0;
 	R (char_is_ext(c) != NIL || in_alphabet(c)) ? 1 : 0;
@@ -94,7 +94,7 @@ C valid_key(TXT_TYPE c)
 
 //< if par == 0 --> swipe non-alphabetical
 //<	if par == 1 --> swipe alphabetical
-UJ swipe_buf(TXT_T buf, I ptr, I lim, C par)
+UJ swipe_buf(STR buf, I ptr, I lim, C par)
 {
 	I i;
 
@@ -103,12 +103,12 @@ UJ swipe_buf(TXT_T buf, I ptr, I lim, C par)
 	R (i + ptr >= lim - 1) ? NIL : i;
 }
 
-V clean_buf(TXT_T buf, I len)
+V clean_buf(STR buf, I len)
 {
 	buf[0] = buf[len - 1] = buf[len - 2] = 0;
 }
 
-UJ sz_buf(TXT_T buf, UJ max)
+UJ sz_buf(STR buf, UJ max)
 {
 	I i;
 	for (i = 0; i < max && buf[i]; i++);
