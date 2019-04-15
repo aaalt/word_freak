@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+#include <wchar.h>
+#include <wctype.h>
+
 #include "../___.h"
 #include "../utl/rnd.h"
 #include "../utl/clk.h"
@@ -24,8 +28,6 @@
 
 //<		EXTRA
 //<	
-
-
 
 //! djbhash \see http://www.burtleburtle.net/bob/hash/doobs.html
 //! One of the best known hash functions for strings, due to djb.
@@ -52,10 +54,8 @@ HTYPE hsh_upper_idx(HTYPE hash, UJ level)
 Z inline V hsh_idx(HT ht, V* s, UJ n, HTYPE* h, HTYPE* idx)
 {
 	LOG("hsh_idx");
-
 	HTYPE hash = ht->fn(s, n);					//<	calculate hash
 	HTYPE i = hash & (ht->level - 1);			//<	map hash onto the first half of table
-
 	if (i < ht->split) 
 		i = hsh_upper_idx(hash, ht->level);
 
@@ -161,12 +161,12 @@ BKT hsh_get_bkt(HT ht, V* k, sz n)
 	}
 	R NULL;
 }
-
 ///////////////////////////////////////////////////////////////
 
 V* hsh_get(HT ht, V* k, sz n)
 {
-	BKT b = hsh_get_bkt(ht, k, n);
+	UJ len = n * SZ(TXT_TYPE);
+	BKT b = hsh_get_bkt(ht, k, len);
 	P(!b, NULL);
 	P((UJ)b == NIL, (V*)NIL);
 	R b->s;
@@ -208,12 +208,17 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 
 	P(!k || !n, (BKT)NIL);										//<	null ptr or empty key
 
-	BKT B = hsh_get_bkt(ht, convert_str(k, n), n);
+	// O("HSH_INS '%ls'\t%lu\t last %u, %u %u\n", (UTF)k, n, ((UTF)k)[n-2], ((UTF)k)[n-1], ((UTF)k)[n]);
+
+	UJ str_len = n * SZ(TXT_TYPE);
+	UJ rec_len = SZ_BKT + str_len + 1;
+	// BKT B = hsh_get_bkt(ht, convert_str(k, n), str_len);
+	BKT B = hsh_get_bkt(ht, k, str_len);
 	HTYPE hash, idx;
-	UJ rec_len = SZ_BKT + n + 1;
+
 	BKT* bp;
 
-	hsh_idx(ht, k, n, &hash, &idx);
+	hsh_idx(ht, k, str_len, &hash, &idx);
 
 	P(B, hsh_inc_payload(ht, B, idx, B->payload));				//< if B with k already exists, just increase payload
 
@@ -225,16 +230,22 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 	ht->mem  	 +=	rec_len;									//<	increment odometers
 	ht->cnt++;
 	B->h 	  		  =	hash;									//<	set hash
-	B->n 			  =	n;										//<	val length
+	// B->n 			  =	n;										//<	val length
+	B->n 			  =	str_len;										//<	val length
+
 	B->packed 		  =	0;										//<	not in heap
 	B->next 		  =	ht->buckets[idx];						//<	link existing list if any
 	B->payload 		  =	payload;								//<	set payload
-	*dsn(B->s, k, n)  =	0;
+	// *dsn(B->s, k, n)  =	0;
+	((TXT_T)(k))[n] = 0;
+	*dsn(B->s, k, str_len)  =	0;
 
+	B->idx 			  =	idx;
 	ht->buckets[idx]  =	B;
 
 	//<	if new bucket has a tail
 	if (B->next) {
+		// T(INFO, "\tht clash for idx %u \t hash %lu \t (str. \"%ls\")", idx,hash,  B->s);
 		DO(ht->rounds, 
 			BKT* bp = &ht->buckets[ht->split];					//<	work with bucket starting from idx split
 			HTYPE new_idx = ht->split + ht->level;				//<	nex available upper index

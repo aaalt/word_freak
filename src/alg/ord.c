@@ -3,27 +3,60 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <wchar.h>
+#include <wctype.h>
+
 #include "../___.h"
 #include "../utl/clk.h"
 #include "ord.h"
+#include "chr.h"
 
 I cmpf_dec(const V* a, const V* b) {
-	// const PAIR x = (PAIR)a;
-	// const PAIR y = (PAIR)b;
-
-	// I cmp = x->cnt - y->cnt;
 	R ((PAIR)b)->cnt - ((PAIR)a)->cnt;
-	// R 	 (cmp < 0)	? 	 1	
-		// :(cmp > 0)	? 	-1	: 0;
-	// R -cmp;
 }
 
 I cmpf_inc(const V* a, const V* b) {
-	// const PAIR x = (PAIR)a;
-	// const PAIR y = (PAIR)b;
-
 	R ((PAIR)a)->cnt - ((PAIR)b)->cnt;
 }
+
+#if (TXT_DATA_TYPE == 1)
+V print_hsh_bkt(BKT b)
+{
+	O("\t%lu\t\"%s\"     \t%u\n", (UJ)(b->payload), (TXT_T)(b->s), (UI)(b->idx));
+}
+#else
+V print_hsh_bkt(BKT b)
+{
+	UJ len = sz_buf((TXT_T)(b->s), SZ_WBUF);
+	I i;
+	TXT_TYPE c;
+	TXT_T s = (TXT_T)(b->s);
+
+	// O("l %lu\t", len);
+	fflush(stdout);
+
+	// O("\t%lu\t\"%ls\"     \t%u\n", (UJ)(b->payload), (TXT_T)(b->s), (UI)(b->idx));
+	O("\t%lu\t\"", (UJ)(b->payload));
+	// fflush(stdout);
+	DO(len,
+
+		// O("!\n");
+		// c = ((TXT_T)(b)->s)[i];
+		c = s[i];
+		// O("!\n");
+		// O("%ls", (TXT_TYPE)(((TXT_T)b)->s[i]));
+		O("%lc", c);
+
+		fflush(stdout);
+	);
+	// if (s[i])
+		// O("\t\t!!\tVERY BAD\n");
+
+	O("\"     \t%u\n", (UI)(b->idx));
+
+
+}
+#endif
 
 UJ ord_ht(HT ht, C par)
 {
@@ -51,16 +84,15 @@ UJ ord_ht(HT ht, C par)
 	T(INFO, "\t[~]\tqsort %d buckets\t\t\t\t\t%lums", j, t);
 
 #ifndef RUN_TEST
-	if (PRINT_TOP != NIL && j >= PRINT_TOP) {
+	if (PRINT_TOP != NIL && j >= PRINT_TOP) 
 		j = PRINT_TOP;
-	}
-	//t = clk_start();
+
+	T(INFO, "\n\tq\tstr\t\tidx\n");
+
 	DO(j, 													//<	print vals
 		b = vals[i].bucket;
-		O("\t%lu\t\"%s\"\n", (UJ)(b->payload), (S)(b->s));
+		print_hsh_bkt(b);
 	)
-	//t = clk_stop();
-	//T(INFO, "\t[~]\tprint %d strings with payload\t\t\t\t%lums", j, t);
 
 #endif	
 	R 0;

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "../___.h"
 #include "../utl/clk.h"
@@ -17,7 +18,7 @@ UJ str_tri_ins(V* struct_1, V* struct_2, TXT_T word, UJ len)
 	LOG("str_tri_ins");
 	
 	X(struct_2 != NULL, 	T(WARN, "incorrect fn usage"), 		NIL);
-	X(!tri_insert((TRIE)struct_1, word, len, (V*)1), 
+	X(!tri_insert((TRIE)struct_1, (S)word, len, (V*)1), 
 							T(FATAL, "can't insert %s", word), 	NIL);
 	R 0;
 }
@@ -31,26 +32,36 @@ UJ str_hsh_print(HT hsh)
 }
 
 //<	hsh_ins
-UJ str_hsh_proc(HT hsh, TXT_T str)
+UJ str_hsh_proc(HT hsh, TXT_T str, UJ len)
 {
 	LOG("str_hsh_proc");
-	X((UJ)hsh_ins(hsh, str, scnt(str), (V*)1) == NIL, T(WARN, "null ptr or empty key"), NIL);
+	X((UJ)hsh_ins(hsh, str, len, (V*)1) == NIL, T(WARN, "null ptr or empty key"), NIL);
 	R 0;
 }
 
-UJ str_tri_in(TRIE tri, TXT_T str)
+UJ str_tri_in(HT tri, TXT_T str, UJ max)
 {
-	R (tri_get(tri, str)) ? 1 : 0;
+	R (hsh_get((HT)tri, str, max) != NULL) ? 1 : 0; 
+}
+
+UJ str_hsh_ins_(V* struct_1, V* struct_2, TXT_T word, UJ len)
+{
+	LOG("str_hsh_ins_");
+	X(!struct_1 || struct_2, T(WARN, "invalid pointer"), NIL);
+
+	R str_hsh_proc((HT)struct_1, word, len);
 }
 
 UJ str_hsh_ins(V* struct_1, V* struct_2, TXT_T word, UJ len)
 {
 	LOG("str_hsh_ins");
 	X(!struct_1 || !struct_2, T(WARN, "invalid pointers"), NIL);
-
-	if (!str_tri_in((TRIE)struct_1, word))
-		R str_hsh_proc((HT)struct_2, word);
+	// convert_str(word, len);
+	if (!str_tri_in((HT)struct_1, word, len))
+		R str_hsh_proc((HT)struct_2, word, len);
 	R 0;
 
 }
+
+
 

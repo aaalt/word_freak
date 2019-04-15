@@ -11,7 +11,7 @@ typedef struct bucket{
 	HTYPE h;				//< value hash
 	UH n;					//< value len
 	struct bucket* next;	//< pointer to next 
-//	HTYPE idx;				//< table index
+	HTYPE idx;				//< table index
 	C packed;				//< in heap
 	V* payload;				//< pointer to payload
 	G s[];					//< value bytes

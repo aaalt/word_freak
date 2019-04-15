@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <locale.h>
 
 #include "___.h"
 
@@ -12,7 +13,8 @@
 #include "alg/set.h"
 #include "alg/str.h"
 
-TRIE STOP_TRIE;
+// TRIE STOP_TRIE;
+HT STOP_TRIE;
 HT TEXT_HSH;
 /*
 C TEXT_BUF_[SZ_TBUF];
@@ -30,8 +32,10 @@ TXT_TYPE WORD_BUF_[SZ_WBUF];
 TXT_T TEXT_BUF = &TEXT_BUF_[0];
 TXT_T WORD_BUF = &WORD_BUF_[0];
 
-TXT_TYPE EXT_KEY_[EXT_KEY_AM] = "'";
-// TXT_TYPE EXT_KEY_[EXT_KEY_AM] = "'_-";
+// TXT_TYPE EXT_KEY_[EXT_KEY_AM] = "'";
+TXT_TYPE EXT_KEY_[EXT_KEY_AM + 1] = L"'_-";
+// TXT_TYPE EXT_KEY_[EXT_KEY_AM] = {'\'', '_', '-'};
+
 TXT_T EXT_KEY = &EXT_KEY_[0];
 
 FILE* f_ptr;
@@ -39,6 +43,7 @@ FILE* f_ptr;
 I main()
 {
 	LOG("_main_");
+	setlocale(LC_ALL, "");
 	UJ t;
 	clock_t s;
 	srand(0);

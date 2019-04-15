@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wctype.h>
 
 #include "../___.h"
 #include "../glb.h"
@@ -15,6 +16,8 @@ G SWIPE_NEXT_VALS = 0;
 G BUF_FULLNESS = 0;		//<	0 buf is empty; 1 buf is full; 2 buf contains something
 
 I cnt_swipe, cnt_ovr_a, cnt_ovr_b, cnt_between, cnt_clean;
+UJ WORD_LEN = 0;
+
 
 UJ SZFILE(FILE* ptr)
 {
@@ -31,9 +34,10 @@ UJ txt_get_word(TXT_T dir, TXT_T source, I max_d, I max_s, I ptr)
 	if (BUF_FULLNESS)
 		// for (j = 0; j < max_d - 1 && valid_key(dir[j]); j++);		//<	j --> next available pos in dir
 		for (j = 0; j < max_d - 1 && valid_key(dir[j]); j++);		//<	j --> next available pos in dir
-	for (i = 0; valid_key(source[ptr + i]) && i < max_s - 1 && j + i < max_d - 1; i++)
+	for (i = 0; valid_key(source[ptr + i]) && i < max_s - 1 && j + i < max_d - 1; i++) 
 		dir[j + i] = source[ptr + i];
 	dir[j + i] = 0;
+	WORD_LEN += i;
 
 	if (i)														//<	something was written in, in any case
 		BUF_FULLNESS = 2;
@@ -48,7 +52,7 @@ V txt_overflow(TXT_T w_buf, I sz_w_buf, TXT_T t_buf, I sz_t_buf, UJ* i, I pos)
 {
 	LOG("txt_overflow");
 	UJ var;
-	T(WARN, "\t[!]\tword '%.10s...' at %lu\t(max. cap. %d)", w_buf, pos, sz_w_buf);
+	T(WARN, "\t[!]\tword '%.10ls...' at %lu\t(max. cap. %d)", w_buf, pos, sz_w_buf);
 	var = swipe_buf(t_buf, *i, sz_t_buf, 1);
 	*i += var;
 	if (var == NIL) {
@@ -112,10 +116,16 @@ UJ txt_proc_buf(TXT_T buf, V* tri, V* hsh, I len, WORD_ADD fn, I param, I prev, 
 
 		INCLUDE:
 		cnt++;
-		P(fn(tri, hsh, WORD_BUF, sz_buf(WORD_BUF, SZ_WBUF)) == NIL, NIL);
+		//<	WORD_BUF gets here perfectly safe and last bytes are 0
+				// O("'%ls'!\n", WORD_BUF);
+		convert_str(WORD_BUF, WORD_LEN + 1);
+		P(fn(tri, hsh, WORD_BUF, WORD_LEN + 1) == NIL, NIL);
+		// O("'%ls'!\n", WORD_BUF);
+
 		CLEAN:
 		cnt_clean++;																		//<!!!!!!!
 		BUF_FULLNESS = 0;													//<	set buf empty
+		WORD_LEN = 0;
 	}
 	R cnt;
 }
@@ -133,16 +143,16 @@ UJ txt_process(FILE* f, V* struct_1, V* struct_2, WORD_ADD fn)
 	X(SZ_TBUF < SZ_WBUF, T(FATAL, "\t[!]\tSZ_TBUF must be >= SZ_WBUF (now SZ_TBUF = %d; SZ_WBUF = %d)", SZ_TBUF, SZ_WBUF), NIL);
 	SWIPE_NEXT_VALS = 0;
 
-	cnt_swipe = cnt_ovr_a = cnt_ovr_b = cnt_between = cnt_clean = 0;
+	WORD_LEN = BUF_FULLNESS = cnt_swipe = cnt_ovr_a = cnt_ovr_b = cnt_between = cnt_clean = 0;
 
 	LOOP:
-	// len = fread(TEXT_BUF, SZ(C), SZ_TBUF - 1, f);
-	len = fread(TEXT_BUF, SZ(TXT_TYPE), SZ_TBUF - 1, f);
+	// O("LOOP\n");
+	len = mfread(f, TEXT_BUF, SZ_TBUF);
 
-	TEXT_BUF[len] = 0;
 	cur = ftell(f);
 
-	i = txt_proc_buf(TEXT_BUF, struct_1, struct_2, len + 1, fn, feof(f), prev, cur);
+	i = txt_proc_buf(TEXT_BUF, struct_1, struct_2, len, fn, feof(f), prev, cur);
+
 	P(i == NIL, NIL);
 	cnt += i;
 	prev = cur;
@@ -150,13 +160,13 @@ UJ txt_process(FILE* f, V* struct_1, V* struct_2, WORD_ADD fn)
 	if (!feof(f)) 
 		goto LOOP;
 
-
 	SWIPE_NEXT_VALS = 0;
 	T(INFO, "\t[|]\tswipe: %d; beg_ovr: %d; mid_ovr: %d; cutted: %d; clean: %d;", cnt_swipe, cnt_ovr_a, cnt_ovr_b, cnt_between, cnt_clean);
 	T(INFO, "\t[|]\t\t%d got to fn\t", cnt);
 	// clean_buf(WORD_BUF, SZ_WBUF);
-	BUF_FULLNESS = 0;
+	BUF_FULLNESS = WORD_LEN = 0;
 	// clean_buf(TEXT_BUF, SZ_TBUF);
+	// exit(0);
 	R cnt;
 }
 
