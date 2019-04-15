@@ -32,29 +32,11 @@ V print_hsh_bkt(BKT b)
 	CHAR c;
 	STR s = (STR)(b->s);
 
-	// O("l %lu\t", len);
-	fflush(stdout);
-
-	// O("\t%lu\t\"%ls\"     \t%u\n", (UJ)(b->payload), (STR)(b->s), (UI)(b->idx));
 	O("\t%lu\t\"", (UJ)(b->payload));
-	// fflush(stdout);
 	DO(len,
-
-		// O("!\n");
-		// c = ((STR)(b)->s)[i];
-		c = s[i];
-		// O("!\n");
-		// O("%ls", (CHAR)(((STR)b)->s[i]));
-		O("%lc", c);
-
-		fflush(stdout);
-	);
-	// if (s[i])
-		// O("\t\t!!\tVERY BAD\n");
-
+		O("%lc", s[i]););
 	O("\"     \t%u\n", (UI)(b->idx));
-
-
+	fflush(stdout);
 }
 #endif
 
@@ -84,6 +66,7 @@ UJ ord_ht(HT ht, C par)
 	T(INFO, "\t[~]\tqsort %d buckets\t\t\t\t\t%lums", j, t);
 
 #ifndef RUN_TEST
+
 	if (PRINT_TOP != NIL && j >= PRINT_TOP) 
 		j = PRINT_TOP;
 
@@ -93,7 +76,6 @@ UJ ord_ht(HT ht, C par)
 		b = vals[i].bucket;
 		print_hsh_bkt(b);
 	)
-
 #endif	
 	R 0;
 }

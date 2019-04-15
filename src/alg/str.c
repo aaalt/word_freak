@@ -13,16 +13,6 @@
 
 #include "../glb.h"
 
-UJ str_tri_ins(V* struct_1, V* struct_2, STR word, UJ len)
-{
-	LOG("str_tri_ins");
-	
-	X(struct_2 != NULL, 	T(WARN, "incorrect fn usage"), 		NIL);
-	X(!tri_insert((TRIE)struct_1, (S)word, len, (V*)1), 
-							T(FATAL, "can't insert %s", word), 	NIL);
-	R 0;
-}
-
 UJ str_hsh_print(HT hsh)
 {
 	LOG("str_hsh_print");
@@ -39,28 +29,22 @@ UJ str_hsh_proc(HT hsh, STR str, UJ len)
 	R 0;
 }
 
-UJ str_tri_in(HT tri, STR str, UJ max)
+/*UJ str_in_stop(HT ht, STR str, UJ len)
 {
-	R (hsh_get((HT)tri, str, max) != NULL) ? 1 : 0; 
-}
+	R (hsh_get((HT)ht, str, len) == NULL) ? 0 : 1;
+}*/
 
-UJ str_hsh_ins_(V* struct_1, V* struct_2, STR word, UJ len)
-{
-	LOG("str_hsh_ins_");
-	X(!struct_1 || struct_2, T(WARN, "invalid pointer"), NIL);
-
-	R str_hsh_proc((HT)struct_1, word, len);
-}
-
-UJ str_hsh_ins(V* struct_1, V* struct_2, STR word, UJ len)
+UJ str_hsh_ins(V* struct_1, V* struct_2, STR word, UJ len, sz el)
 {
 	LOG("str_hsh_ins");
-	X(!struct_1 || !struct_2, T(WARN, "invalid pointers"), NIL);
-	// convert_str(word, len);
-	if (!str_tri_in((HT)struct_1, word, len))
-		R str_hsh_proc((HT)struct_2, word, len);
-	R 0;
+	UJ l = len * el;
 
+	X(!struct_1 || (!struct_1 && !struct_2), T(FATAL, "invalid pointers"), NIL);
+
+	if (!struct_2 || hsh_get((HT)struct_2, word, l) == NULL)
+		 R str_hsh_proc((HT)struct_1, word, l);
+
+	R 0;
 }
 
 

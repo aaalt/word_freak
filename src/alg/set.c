@@ -22,7 +22,8 @@ FILE* set_start(FILE* f)
 {
 	LOG("set_start");
 	FILE* g;
-	UJ t;
+	UJ t, ptr;
+
 	X(TXT_DATA_TYPE != 1 && TXT_DATA_TYPE != 4, T(FATAL, "\t[!]\tinvalid data type size\t[TXT_DATA_TYPE = %d]", TXT_DATA_TYPE), (FILE*)NIL);
 
 	f = mfopen(f, TXT_FILE);
@@ -32,33 +33,30 @@ FILE* set_start(FILE* f)
 	X(!g, 			{T(FATAL, "FILE %s does not exist", 	STP_FILE);
 															fclose(f);}, (FILE*)NIL);
 	clk_start();
-	// STOP_HSH = tri_init();
-	// X(!STOP_HSH, 	{T(FATAL,"cannot init trie"); 			fclose(f);
-															// fclose(g);}, (FILE*)NIL);
+	
 	STOP_HSH = hsh_init(16, 2);
-	X(!STOP_HSH, 	{T(FATAL,"cannot init trie"); 			fclose(f);
+	X(!STOP_HSH, 	{T(FATAL,"cannot init stop_hash"); 			fclose(f);
 															fclose(g);}, (FILE*)NIL);
 
 	t = clk_stop();
-	T(INFO, "\t[+]\ttri_init\t\t\t\t\t\t%lums", STOP_HSH->cnt, STOP_HSH->mem, t);
+	T(INFO, "\t[+]\tstop_hsh_init\t\t\t\t\t\t%lums", STOP_HSH->cnt, STOP_HSH->mem, t);
 
 	clk_start();
-	// X(txt_process(g, STOP_HSH, NULL, str_tri_ins) == NIL, 
-	// 				{T(FATAL, "cannot make stop words trie");
-	// 														tri_destroy(STOP_HSH); 
-	// 														fclose(g);
-	// 														fclose(f);}, (FILE*)NIL);
-	X(txt_process(g, STOP_HSH, NULL, str_hsh_ins_) == NIL, 
-					{T(FATAL, "cannot make stop words trie");
-															hsh_destroy(STOP_HSH); 
-															fclose(g);
-															fclose(f);}, (FILE*)NIL);
+
+	ptr = txt_process(g, STOP_HSH, NULL, (WORD_ADD)str_hsh_ins, SZ(CHAR));
+	if (ptr == NIL){
+		T(FATAL, "cannot make stop_hash");
+		hsh_destroy(STOP_HSH); 
+		fclose(g);
+		fclose(f); 
+		R (FILE*)NIL;
+	}
+
 	t = clk_stop();
-	T(INFO, "\t[+]\ttxt_process for trie (%d stop words inserted)\t\t%lums", STOP_HSH->cnt, t);
+	T(INFO, "\t[+]\ttxt_process for stop_hash (%d stop words inserted)\t%lums", STOP_HSH->cnt, t);
 	
-	TEXT_HSH = hsh_init(256, 3);
-	// X(!TEXT_HSH, 	{T(FATAL, "cannot init hash"); 			tri_destroy(STOP_HSH); 
-	X(!TEXT_HSH, 	{T(FATAL, "cannot init hash"); 			hsh_destroy(STOP_HSH); 
+	TEXT_HSH = hsh_init(2048, 2);
+	X(!TEXT_HSH, 	{T(FATAL, "cannot init txt_hash"); 			hsh_destroy(STOP_HSH); 
 															fclose(f);
 															fclose(g);}, (FILE*)NIL);
 	fclose(g);
@@ -73,7 +71,6 @@ UJ set_end(FILE* f)
 	clk_start();
 	fclose(f);
 	hsh_destroy(TEXT_HSH);
-	// tri_destroy(STOP_HSH);
 	hsh_destroy(STOP_HSH);
 	t = clk_stop();
 	T(INFO, "\t[-]\tdeallocate mem of trie, hsh and file (mem %d)\t%lums", mem, t);

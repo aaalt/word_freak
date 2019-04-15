@@ -165,8 +165,7 @@ BKT hsh_get_bkt(HT ht, V* k, sz n)
 
 V* hsh_get(HT ht, V* k, sz n)
 {
-	UJ len = n * SZ(CHAR);
-	BKT b = hsh_get_bkt(ht, k, len);
+	BKT b = hsh_get_bkt(ht, k, n);
 	P(!b, NULL);
 	P((UJ)b == NIL, (V*)NIL);
 	R b->s;
@@ -208,17 +207,13 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 
 	P(!k || !n, (BKT)NIL);										//<	null ptr or empty key
 
-	// O("HSH_INS '%ls'\t%lu\t last %u, %u %u\n", (UTF)k, n, ((UTF)k)[n-2], ((UTF)k)[n-1], ((UTF)k)[n]);
-
-	UJ str_len = n * SZ(CHAR);
-	UJ rec_len = SZ_BKT + str_len + 1;
-	// BKT B = hsh_get_bkt(ht, convert_str(k, n), str_len);
-	BKT B = hsh_get_bkt(ht, k, str_len);
+	UJ rec_len = SZ_BKT + n + 1;
+	BKT B = hsh_get_bkt(ht, k, n);
 	HTYPE hash, idx;
 
 	BKT* bp;
 
-	hsh_idx(ht, k, str_len, &hash, &idx);
+	hsh_idx(ht, k, n, &hash, &idx);
 
 	P(B, hsh_inc_payload(ht, B, idx, B->payload));				//< if B with k already exists, just increase payload
 
@@ -226,19 +221,15 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 		ht->cnt, idx, ht->split, ht->level);
 
 	//<	insert the value
-	B = malloc(rec_len);		chk(B, (BKT)NIL);					//<	init new bucket with ext len
+	B = malloc(rec_len);		chk(B, (BKT)NIL);				//<	init new bucket with ext len
 	ht->mem  	 +=	rec_len;									//<	increment odometers
 	ht->cnt++;
 	B->h 	  		  =	hash;									//<	set hash
-	// B->n 			  =	n;										//<	val length
-	B->n 			  =	str_len;										//<	val length
-
+	B->n 			  =	n;										//<	val length
 	B->packed 		  =	0;										//<	not in heap
 	B->next 		  =	ht->buckets[idx];						//<	link existing list if any
 	B->payload 		  =	payload;								//<	set payload
-	// *dsn(B->s, k, n)  =	0;
-	((STR)(k))[n] = 0;
-	*dsn(B->s, k, str_len)  =	0;
+	*dsn(B->s, k, n)  =	0;
 
 	B->idx 			  =	idx;
 	ht->buckets[idx]  =	B;
@@ -288,55 +279,11 @@ V hsh_dump(HT ht)
 		b = ht->buckets[i];
 		if (!b)
 			continue;
-		TSTART();
 		T(TEST, "%5lu ", i);
 		W(b){
 			T(TEST,"(%s)=%d,%c %s ", b->s, b->n, "NY"[b->packed], STR_ARROW_RIGHT);
 			b = b->next;
 		}
 		T(TEST, STR_EMPTY_SET);
-		TEND();)
+		)
 }
-
-
-/*	??????????????????
-hsh_pack(HT ht) {
-	LOG("hsh_pack");
-	BKT prev, curr, next;
-	V*tmpheap = malloc(ht->mem); chk(tmpheap, 0);
-	UJ hptr = 0; //< heap pointer
-	V*mc;
-	sz buckets_packed = 0;
-	DO(hsh_capacity(ht),
-		prev = NULL;
-		curr = ht->buckets[i];
-		W(curr){	
-			//hsh_print(curr);
-			sz bsize = SZ_BKT + curr->n + 1;
-			BKT old_addr = curr;
-			BKT new_addr = tmpheap + hptr;
-			mc = mcpy(new_addr, curr, bsize);
-			if(!prev)
-				ht->buckets[i] = new_addr;
-			else
-				prev->next = new_addr;
-			prev = new_addr;
-			next = curr->next;
-			if (!new_addr->packed) {
-				free(old_addr);
-				new_addr->packed = 1;
-			}
-			curr = next;
-			hptr += bsize;
-			buckets_packed++;
-			//T(TEST, "packed bkt=%lu (size=%lu)", i, bsize);
-		}
-	)
-	if(ht->heap)free(ht->heap);
-	ht->heap = tmpheap;
-	T(DEBUG, "packing complete, bkts=%lu", buckets_packed);
-	R1;
-}
-
-*/
-
