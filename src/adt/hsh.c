@@ -234,6 +234,8 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 	B->idx 			  =	idx;
 	ht->buckets[idx]  =	B;
 
+	// O("+%ls+\n", B->s);
+
 	//<	if new bucket has a tail
 	if (B->next) {
 		// T(INFO, "\tht clash for idx %u \t hash %lu \t (str. \"%ls\")", idx,hash,  B->s);

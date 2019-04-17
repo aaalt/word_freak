@@ -78,16 +78,20 @@ UJ char_is_ext(CHAR c)
 	R NIL;
 }
 
-STR convert_str(STR key, I len)
+STR convert_str(STR key, I len, C par)
 {
-	DO(len, 
-		key[i] = cs(key[i]);)
+	I i;
+	// DO(len, 
+	for (i = 0; i < len; i++)
+		key[i] = cs(key[i]);
+	if (par)
+		key[i] = 0;
 	R key;
 }
 
 C valid_key(CHAR c)
 {
-	R (in_alphabet(c)) ? 1 : 0;
+	// R (in_alphabet(c)) ? 1 : 0;
 	R (char_is_ext(c) != NIL || in_alphabet(c)) ? 1 : 0;
 }
 
@@ -96,7 +100,7 @@ C valid_key(CHAR c)
 UJ swipe_buf(STR buf, I ptr, I lim, C par)
 {
 	I i;
-	for (i = 0; i + ptr < lim && !(par^valid_key(buf[i + ptr])); i++);		
+	for (i = 0; i + ptr < lim && !(par^valid_key(buf[i + ptr])); i++);
 	R (i + ptr >= lim - 1) ? NIL : i;
 }
 

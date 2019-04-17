@@ -29,15 +29,11 @@ UJ str_hsh_proc(HT hsh, STR str, UJ len)
 	R 0;
 }
 
-/*UJ str_in_stop(HT ht, STR str, UJ len)
-{
-	R (hsh_get((HT)ht, str, len) == NULL) ? 0 : 1;
-}*/
-
 UJ str_hsh_ins(V* struct_1, V* struct_2, STR word, UJ len, sz el)
 {
 	LOG("str_hsh_ins");
 	UJ l = len * el;
+	// word[len] = 0;
 
 	X(!struct_1 || (!struct_1 && !struct_2), T(FATAL, "invalid pointers"), NIL);
 

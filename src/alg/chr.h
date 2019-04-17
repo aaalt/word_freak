@@ -13,6 +13,6 @@ ext V clean_buf(STR buf, I len);
 
 ext UJ sz_buf(STR buf, UJ max);
 
-ext STR convert_str(STR key, I len);
+ext STR convert_str(STR key, I len, C par);
 
 ext UJ mfread(FILE* f, STR buf, UJ max);

@@ -27,7 +27,8 @@ V print_hsh_bkt(BKT b)
 #else
 V print_hsh_bkt(BKT b)
 {
-	UJ len = sz_buf((STR)(b->s), SZ_WBUF);
+	// UJ len = sz_buf((STR)(b->s), SZ_WBUF);
+	UJ len = (b->n)/SZ(CHAR);
 	I i;
 	CHAR c;
 	STR s = (STR)(b->s);
@@ -36,6 +37,7 @@ V print_hsh_bkt(BKT b)
 	DO(len,
 		O("%lc", s[i]););
 	O("\"     \t%u\n", (UI)(b->idx));
+	// O("\t%lu\t\"%ls\"     \t%u\n", (UJ)(b->payload), (STR)(b->s), (UI)(b->idx));
 	fflush(stdout);
 }
 #endif
@@ -74,6 +76,7 @@ UJ ord_ht(HT ht, C par)
 
 	DO(j, 													//<	print vals
 		b = vals[i].bucket;
+		// O("len %d; '%ls'\n", (b->n)/4, b->s);
 		print_hsh_bkt(b);
 	)
 #endif	
