@@ -1,4 +1,4 @@
-for w_buf len '8' 'eight' or even _eight eight -eight eight- eight_ 'eight eight'
+for w_buf len '8' 'eight' or even _eight EIGHT -eight eight- eight_ 'eight eight'
 sorry:
 'eight_		'eight-
 _eight_ 	_eight'		_eight-
