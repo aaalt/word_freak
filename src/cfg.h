@@ -7,14 +7,15 @@
 #define TEST_MODE
 
 //! L_FATAL|L_WARN|L_INFO|L_TEST|L_DEBUG|L_TRACE
-#ifdef TEST_MODE
+// #ifndef RUN_TEST
+#ifdef RUN_TEST
 #define LOGLEVEL L_TEST
 #else
-#define LOGLEVEL L_TRACE	//< set to WARN in prod builds
+#define LOGLEVEL L_WARN	//< set to WARN in prod builds
 #endif
 
 #define PRINT_PAR 1			//<	set 0 if increasing sort is needed
-#define PRINT_TOP NIL		//<	set NIL if you want to print all	
+#define PRINT_TOP 15		//<	set NIL if you want to print all	
 
 // !	size of EXT_KEY (amount of extra keys for parsing, trie and hash)
 // #define EXT_KEY_AM 1

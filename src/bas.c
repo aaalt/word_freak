@@ -16,11 +16,12 @@
 HT STOP_HSH;
 HT TEXT_HSH;
 
-CHAR TEXT_BUF_[SZ_TBUF];
-CHAR WORD_BUF_[SZ_WBUF];
+// CHAR TEXT_BUF_[SZ_TBUF];
+// CHAR WORD_BUF_[SZ_WBUF];
+CHAR BUF_[SZ_TBUF + SZ_WBUF];
 
-STR TEXT_BUF = &TEXT_BUF_[0];
-STR WORD_BUF = &WORD_BUF_[0];
+STR TEXT_BUF = &BUF_[SZ_WBUF];
+STR WORD_BUF = &BUF_[0];
 
 // CHAR EXT_KEY_[EXT_KEY_AM + 1] = L"'";
 CHAR EXT_KEY_[EXT_KEY_AM + 1] = L"'_-";
@@ -46,7 +47,7 @@ I main()
 		set_end(f_ptr), 1);		
 	t = clk_since(s);
 	
-	T(INFO, "\t[~]\ttxt_process for ht (inserted %d str)\t\t\t%lums", TEXT_HSH->cnt, t);
+	// T(INFO, "\t[~]\ttxt_process for ht (inserted %d str)\t\t\t%lums", TEXT_HSH->cnt, t);
 	X(str_hsh_print(TEXT_HSH) == NIL, 		set_end(f_ptr), 1);		
 	
 	set_end(f_ptr);			
