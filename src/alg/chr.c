@@ -78,14 +78,17 @@ UJ char_is_ext(CHAR c)
 	R NIL;
 }
 
-STR convert_str(STR key, I len, C par)
+STR convert_str(STR key, I len, I max, C par)
 {
 	I i;
 	// DO(len, 
-	for (i = 0; i < len; i++)
+	for (i = 0; i < len && i < max; i++)
 		key[i] = cs(key[i]);
+	if (i == max)
+		R NULL;
 	if (par)
 		key[i] = 0;
+
 	R key;
 }
 

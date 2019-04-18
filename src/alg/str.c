@@ -33,12 +33,12 @@ UJ str_hsh_ins(V* struct_1, V* struct_2, STR word, UJ len, sz el)
 {
 	LOG("str_hsh_ins");
 	UJ l = len * el;
-	// word[len] = 0;
 
 	X(!struct_1 || (!struct_1 && !struct_2), T(FATAL, "invalid pointers"), NIL);
 
-	if (!struct_2 || hsh_get((HT)struct_2, word, l) == NULL)
+	if (!struct_2 || hsh_get((HT)struct_2, word, l) == NULL) {
 		 R str_hsh_proc((HT)struct_1, word, l);
+	} 
 
 	R 0;
 }

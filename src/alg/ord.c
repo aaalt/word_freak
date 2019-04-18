@@ -45,7 +45,7 @@ V print_hsh_bkt(BKT b)
 UJ ord_ht(HT ht, C par)
 {
 	LOG("ord_ht");
-	UJ i, j = 0;
+	UJ i = 0, j = 0;
 	UJ t;
 	pPAIR vals[ht->cnt];
 	BKT b;
@@ -68,7 +68,6 @@ UJ ord_ht(HT ht, C par)
 	T(INFO, "\t[~]\tqsort %d buckets\t\t\t\t\t%lums", j, t);
 
 #ifndef RUN_TEST
-
 	if (PRINT_TOP != NIL && j >= PRINT_TOP) 
 		j = PRINT_TOP;
 
@@ -76,7 +75,6 @@ UJ ord_ht(HT ht, C par)
 
 	DO(j, 													//<	print vals
 		b = vals[i].bucket;
-		// O("len %d; '%ls'\n", (b->n)/4, b->s);
 		print_hsh_bkt(b);
 	)
 #endif	
