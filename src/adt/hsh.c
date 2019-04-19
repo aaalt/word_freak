@@ -236,7 +236,6 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 
 	//<	if new bucket has a tail
 	if (B->next) {
-		// T(INFO, "\tht clash for idx %u \t hash %lu \t (str. \"%ls\")", idx,hash,  B->s);
 		DO(ht->rounds, 
 			BKT* bp = &ht->buckets[ht->split];					//<	work with bucket starting from idx split
 			HTYPE new_idx = ht->split + ht->level;				//<	nex available upper index
@@ -268,7 +267,7 @@ BKT hsh_ins(HT ht, V* k, sz n, V* payload)
 }
 
 ///////////////////////////////////////////////////////////////
-
+/*
 V hsh_dump(HT ht)
 {
 	LOG("hsh_dump");
@@ -285,5 +284,6 @@ V hsh_dump(HT ht)
 			b = b->next;
 		}
 		T(TEST, STR_EMPTY_SET);
-		)
+	)
 }
+*/

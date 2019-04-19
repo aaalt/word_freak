@@ -60,7 +60,7 @@ UJ mfread(FILE* f, STR buf, UJ max)
 	for (i = 0; i < max - 1 && !feof(f); i++) 
 		buf[i] = fgetwc(f);
 	buf[i] = 0;
-	R i + 1;
+	R i;
 }
 #endif
 
@@ -81,7 +81,6 @@ UJ char_is_ext(CHAR c)
 STR convert_str(STR key, I len, I max, C par)
 {
 	I i;
-	// DO(len, 
 	for (i = 0; i < len && i < max; i++)
 		key[i] = cs(key[i]);
 	if (i == max)

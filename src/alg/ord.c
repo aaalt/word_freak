@@ -27,10 +27,7 @@ V print_hsh_bkt(BKT b)
 #else
 V print_hsh_bkt(BKT b)
 {
-	// UJ len = sz_buf((STR)(b->s), SZ_WBUF);
 	UJ len = (b->n)/SZ(CHAR);
-	I i;
-	CHAR c;
 	STR s = (STR)(b->s);
 
 	O("\t%lu\t\"", (UJ)(b->payload));
