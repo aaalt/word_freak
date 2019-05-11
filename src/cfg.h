@@ -46,8 +46,8 @@ typedef void* STR;
 // #define TXT_FILE "txt/overflow.txt"
 // #define TXT_FILE "txt/ltl.txt"
 // #define TXT_FILE "txt/aaa.txt"
-// #define TXT_FILE "txt/finnegans_wake.txt"
-#define TXT_FILE "txt/anna.txt"
+#define TXT_FILE "txt/finnegans_wake.txt"
+// #define TXT_FILE "txt/anna.txt"
 // !	path to file which will be processed into trie (stop words)
 #define STP_FILE "txt/stop.txt"
 // #define STP_FILE "txt/plain.txt"

@@ -5,8 +5,8 @@ frequency list of every word in a file with the exception of words from the stop
 
 new tasks:
 
-- [ ] reorganize parsing
-- [ ] reorganize everything for UTF-8 encoding of input files
+- [x] reorganize parsing
+- [x] reorganize everything for UTF-8 encoding of input files
 --------------------
 
 - [x] reorganize main algorithm (txt parsing should work for trie)
